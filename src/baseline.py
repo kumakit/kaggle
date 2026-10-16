@@ -17,7 +17,10 @@ def main():
     print("=== Kaggle Digit Recognizer Baseline ===")
 
     # 1. データパスの探索
+    import glob
+
     candidate_paths = [
+        "/kaggle/input/competitions/digit-recognizer",
         "/kaggle/input/digit-recognizer",
         "../input/digit-recognizer",
         "./data",
@@ -29,6 +32,11 @@ def main():
         if os.path.exists(os.path.join(p, "train.csv")):
             data_dir = p
             break
+
+    if data_dir is None:
+        found = glob.glob("/kaggle/input/**/train.csv", recursive=True)
+        if found:
+            data_dir = os.path.dirname(found[0])
 
     if data_dir is None:
         print("【エラー】train.csv が見つかりませんでした。")
