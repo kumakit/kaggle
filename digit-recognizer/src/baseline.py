@@ -23,6 +23,8 @@ def main():
         "/kaggle/input/competitions/digit-recognizer",
         "/kaggle/input/digit-recognizer",
         "../input/digit-recognizer",
+        "./digit-recognizer/data",
+        "./digit-recognizer",
         "./data",
         "."
     ]
