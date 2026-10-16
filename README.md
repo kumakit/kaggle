@@ -18,13 +18,13 @@ GitHub Issue（[kumakit/mission-control#402](https://github.com/kumakit/mission-
 
 ## 2. コンペティション一覧
 
-今後挑戦するコンペティションは、本リポジトリの直下に専用フォルダを作成して独立管理します。
+今後挑戦するコンペティションは、実施順がわかるよう3桁の連番プレフィックス（`001_`, `002_`, ...）を付けた専用フォルダを作成して独立管理します。
 
-| コンペ名 | フォルダ | 種別 / タスク | ステータス | ガイドリンク |
-|---|---|---|---|---|
-| **Digit Recognizer** | [`digit-recognizer/`](digit-recognizer/) | Getting Started / 手書き数字画像分類 (0〜9) | **進行中 (Phase 3)** | [入門ガイド](digit-recognizer/README.md) |
-| *Store Sales - Time Series Forecasting* | `store-sales/` (予定) | Getting Started / 店舗売上の時系列需要予測 | 今後検討 | - |
-| *Natural Language Processing with Disaster Tweets* | `nlp-getting-started/` (予定) | Getting Started / 災害ツイートのテキスト分類 | 今後検討 | - |
+| # | コンペ名 | フォルダ | 種別 / タスク | ステータス | ガイドリンク |
+|---|---|---|---|---|---|
+| **001** | **Digit Recognizer** | [`001_digit-recognizer/`](001_digit-recognizer/) | Getting Started / 手書き数字画像分類 (0〜9) | **進行中 (Phase 3)** | [入門ガイド](001_digit-recognizer/README.md) |
+| 002 | *Store Sales - Time Series Forecasting* | `002_store-sales/` (予定) | Getting Started / 店舗売上の時系列需要予測 | 今後検討 | - |
+| 003 | *Natural Language Processing with Disaster Tweets* | `003_nlp-getting-started/` (予定) | Getting Started / 災害ツイートのテキスト分類 | 今後検討 | - |
 
 ---
 
@@ -37,7 +37,7 @@ kaggle/
 ├── README.md                          # 全体インデックス（本ファイル）
 ├── .gitignore                         # Python/データ共通の除外設定
 │
-├── digit-recognizer/                  # コンペごとの専用フォルダ
+├── 001_digit-recognizer/              # 実施順の連番付きコンペフォルダ
 │   ├── README.md                      # コンペ入門ガイド・進行手順
 │   ├── rules-ja.md                    # 公式ルールの日本語要約
 │   ├── community-digest.md            # 初心者向け厳選Q&A・おすすめNotebook
@@ -47,5 +47,5 @@ kaggle/
 │   └── src/                           # ローカル再現用スクリプト
 │       └── baseline.py
 │
-└── [次のコンペ名]/                     # 今後追加されるコンペフォルダ
+└── 002_[次のコンペ名]/                 # 今後追加されるコンペフォルダ
 ```
