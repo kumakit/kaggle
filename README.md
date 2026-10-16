@@ -106,25 +106,28 @@ ImageId,Label
 
 ---
 
-## 8. これからの最初の3ステップ
+---
 
-- **Step 1: コンペ参加規約への同意（所要時間: 3分）**
-  - ブラウザでコンペ公式ページを開き、「Join Competition」を押して規約に同意します。
-- **Step 2: データの確認と可視化（所要時間: 30分）**
-  - Kaggle上で新規Notebookを作成し、`train.csv` を読み込んで「手書き数字が実際にどんな画像か」を1枚画面に表示してみます。
-- **Step 3: 最初の提出（ベースライン作成）（所要時間: 45分）**
-  - シンプルな機械学習モデル（例: ロジスティック回帰など）を使ってテストデータの予測を行い、CSVを出力して手動で初提出してみます。
+## 8. 学習の進め方と成果物マップ
+
+- [x] **Step 1: コンペ参加規約への同意**（完了済み！）
+- [x] **Step 2: 公式ルールの理解とコミュニティ情報の精読**
+  - [rules-ja.md](rules-ja.md)：公式ルールの日本語要約
+  - [community-digest.md](community-digest.md)：初心者向け厳選Q&AとおすすめNotebook
+  - [poc-info-retrieval.md](poc-info-retrieval.md)：情報取得（MCP/CLI）の検証レポート
+- [ ] **Step 3: 初回提出（ベースラインの実行と提出）**
+  - [notebooks/01-baseline.ipynb](notebooks/01-baseline.ipynb)：Kaggle上でそのまま動く初提出用ノートブック
+  - [src/baseline.py](src/baseline.py)：ローカル（Python）で再現する場合のスクリプト
 
 ---
 
 ## 9. 【今すぐやること】次に操作する1ステップ
 
-迷わず進められるよう、**今この瞬間に実行する唯一の操作** はこちらです：
+いよいよ **初回提出（約96%のスコア獲得）** に向けてノートブックを動かしてみましょう！今やる操作はこれだけです：
 
-> 👉 **Kaggleにログインしたブラウザで、以下のURLを開いて「Join Competition」（または「I Understand and Accept」）をクリックする**
+> 👉 **Kaggleのコンペ画面右上の「Create Notebook」をクリックして、新しいノートブックを立ち上げる**
 > 
 > 🔗 **https://www.kaggle.com/competitions/digit-recognizer**
 >
-> *(※すでに参加済みの場合は、画面右上の「Create Notebook」ボタンが見える状態になっていればOKです)*
+> ノートブックが開いたら、[`notebooks/01-baseline.ipynb`](notebooks/01-baseline.ipynb) のコードを貼り付けるかインポートし、「Run All」を押すだけで提出用CSV（`submission.csv`）が生成されます！
 
-この1ステップが完了したら、Phase 1以降で実際にNotebookを開いてデータを覗いてみましょう！
