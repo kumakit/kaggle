@@ -1,0 +1,29 @@
+# Python virtual environment
+.venv/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Data files (keep repository lightweight)
+*.csv
+*.zip
+*.gz
+*.parquet
+
+# Excluded folders per guidelines
+Archives/
+RAW/
+temp/
+dist/
+node_modules/
+
+# Environment / Secrets
+.env
+kaggle.json
