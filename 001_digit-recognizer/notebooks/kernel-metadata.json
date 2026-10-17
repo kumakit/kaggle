@@ -1,0 +1,17 @@
+{
+  "enable_internet": false,
+  "title": "Digit Recognizer: Model Comparison",
+  "kernel_type": "notebook",
+  "code_file": "02-model-comparison.ipynb",
+  "model_sources": [],
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "language": "python",
+  "competition_sources": [
+    "digit-recognizer"
+  ],
+  "kernel_sources": [],
+  "dataset_sources": [],
+  "id": "nobuyukikumagai/digit-recognizer-model-comparison"
+}
