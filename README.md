@@ -22,7 +22,7 @@ GitHub Issue（[kumakit/mission-control#402](https://github.com/kumakit/mission-
 
 | # | コンペ名 | フォルダ | 種別 / タスク | ステータス | ガイドリンク |
 |---|---|---|---|---|---|
-| **001** | **Digit Recognizer** | [`001_digit-recognizer/`](001_digit-recognizer/) | Getting Started / 手書き数字画像分類 (0〜9) | **進行中 (Phase 3)** | [入門ガイド](001_digit-recognizer/README.md) |
+| **001** | **Digit Recognizer** | [`001_digit-recognizer/`](001_digit-recognizer/) | Getting Started / 手書き数字画像分類 (0〜9) | **完了・卒業 (0.99132 / 319位)** | [入門ガイド](001_digit-recognizer/README.md) |
 | 002 | *Store Sales - Time Series Forecasting* | `002_store-sales/` (予定) | Getting Started / 店舗売上の時系列需要予測 | 今後検討 | - |
 | 003 | *Natural Language Processing with Disaster Tweets* | `003_nlp-getting-started/` (予定) | Getting Started / 災害ツイートのテキスト分類 | 今後検討 | - |
 
@@ -38,14 +38,18 @@ kaggle/
 ├── .gitignore                         # Python/データ共通の除外設定
 │
 ├── 001_digit-recognizer/              # 実施順の連番付きコンペフォルダ
-│   ├── README.md                      # コンペ入門ガイド・進行手順
+│   ├── README.md                      # コンペ入門ガイド・進行手順・総括
 │   ├── rules-ja.md                    # 公式ルールの日本語要約
 │   ├── community-digest.md            # 初心者向け厳選Q&A・おすすめNotebook
 │   ├── poc-info-retrieval.md          # 情報取得（MCP/CLI）の検証レポート
+│   ├── learning-log.md                # 実験記録・考察（#001〜#003）
 │   ├── notebooks/                     # Kaggle / Jupyter ノートブック
-│   │   └── 01-baseline.ipynb          # 初回提出用ベースライン
+│   │   ├── 01-baseline.ipynb          # 初回提出用ベースライン (0.96360)
+│   │   ├── 02-model-comparison.ipynb # ロジスティック回帰 vs RF 比較 & 誤答可視化
+│   │   └── 03-cnn.ipynb               # 2ブロックCNN (0.99132 / 319位)
 │   └── src/                           # ローカル再現用スクリプト
-│       └── baseline.py
+│       ├── baseline.py
+│       └── model_comparison.py
 │
 └── 002_[次のコンペ名]/                 # 今後追加されるコンペフォルダ
 ```
