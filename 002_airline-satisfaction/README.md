@@ -82,12 +82,14 @@ Digit Recognizer では画像専用の「CNN」を使いましたが、**表形�
 
 ## 6. 学習・挑戦のロードマップ
 
-- [ ] **Step 1: コンペ参加規約への同意**
-  - 公式ページ（https://www.kaggle.com/competitions/playground-series-s6e10）で「I Understand and Accept」をクリック。
-- [ ] **Step 2: 最初のベースライン提出（Kaggle Notebook）**
-  - シンプルな前処理 ＋ LightGBM（またはロジスティック回帰）で初提出を完了。
-  - リーダーボードに名前を載せる！
-- [ ] **Step 3: リアルタイムDiscussionの探索 & 5分割CVの構築**
-  - 活発なコミュニティから「効く特徴量」をピックアップして手元で検証。
+- [x] **Step 1: コンペ参加規約への同意**（完了！）
+  - 公式ページで「Join Competition」を完了。
+- [x] **Step 2: 最初のベースライン提出（Kaggle Notebook）**（完了！スコア: **`0.95791`**、順位: **1,697位** 🎉）
+  - [notebooks/01-baseline.ipynb](notebooks/01-baseline.ipynb)：Kaggle上でそのまま動くLightGBMベースラインノートブック
+  - [src/baseline.py](src/baseline.py)：ローカル再現用スクリプト
+  - [learning-log.md](learning-log.md)：実験 #001 記録済み（手元 `0.95828` と本番 `0.95791` が完全連動）
+- [ ] **Step 3: リアルタイムDiscussionの探索 & ドメイン特徴量作成**（現在進行中！）
+  - トップ解法・コミュニティで議論されている「遅延の挽回」「サービス平均・最低点」「フライト距離プロファイル」等の特徴量を設計。
 - [ ] **Step 4: スコア改善と上位へのランクアップ**
   - 特徴量エンジニアリング、ハイパーパラメータ調整でスコアアップを狙う。
+
