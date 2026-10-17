@@ -88,8 +88,11 @@ Digit Recognizer では画像専用の「CNN」を使いましたが、**表形�
   - [notebooks/01-baseline.ipynb](notebooks/01-baseline.ipynb)：Kaggle上でそのまま動くLightGBMベースラインノートブック
   - [src/baseline.py](src/baseline.py)：ローカル再現用スクリプト
   - [learning-log.md](learning-log.md)：実験 #001 記録済み（手元 `0.95828` と本番 `0.95791` が完全連動）
-- [ ] **Step 3: リアルタイムDiscussionの探索 & ドメイン特徴量作成**（現在進行中！）
-  - トップ解法・コミュニティで議論されている「遅延の挽回」「サービス平均・最低点」「フライト距離プロファイル」等の特徴量を設計。
-- [ ] **Step 4: スコア改善と上位へのランクアップ**
-  - 特徴量エンジニアリング、ハイパーパラメータ調整でスコアアップを狙う。
+- [x] **Step 3: リアルタイムDiscussionの探索 & ドメイン特徴量作成**（完了！）
+  - Kaggle公式MCPを活用し、最新トピック「Flight Distance ＝ 路線ID」の知見を発掘！
+  - [src/feature_engineering.py](src/feature_engineering.py) および [src/ensemble_blend.py](src/ensemble_blend.py)
+- [x] **Step 4: スコア改善と上位へのランクアップ**（完了！スコア: **`0.95954`**、順位: **`1,058位`** 🚀）
+  - [src/route_id_te.py](src/route_id_te.py)：路線頻度 ＋ In-Fold Target Encoding 実装
+  - [learning-log.md](learning-log.md)：実験 #004 にて **一撃で 633人抜き（1691位 ➔ 1058位）の大躍進** を達成！
+
 
