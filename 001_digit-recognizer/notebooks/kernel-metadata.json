@@ -1,17 +1,17 @@
 {
-  "enable_internet": false,
-  "title": "Digit Recognizer: Model Comparison",
   "kernel_type": "notebook",
-  "code_file": "02-model-comparison.ipynb",
-  "model_sources": [],
-  "is_private": true,
-  "enable_gpu": false,
+  "enable_gpu": true,
+  "dataset_sources": [],
   "enable_tpu": false,
-  "language": "python",
+  "model_sources": [],
   "competition_sources": [
     "digit-recognizer"
   ],
+  "enable_internet": false,
+  "code_file": "03-cnn.ipynb",
+  "title": "Digit Recognizer: CNN Deep Learning (0.99+)",
   "kernel_sources": [],
-  "dataset_sources": [],
-  "id": "nobuyukikumagai/digit-recognizer-model-comparison"
+  "id": "nobuyukikumagai/digit-recognizer-cnn",
+  "is_private": true,
+  "language": "python"
 }
