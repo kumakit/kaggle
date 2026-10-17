@@ -115,19 +115,21 @@ ImageId,Label
   - [rules-ja.md](rules-ja.md)：公式ルールの日本語要約
   - [community-digest.md](community-digest.md)：初心者向け厳選Q&AとおすすめNotebook
   - [poc-info-retrieval.md](poc-info-retrieval.md)：情報取得（MCP/CLI）の検証レポート
-- [ ] **Step 3: 初回提出（ベースラインの実行と提出）**
+- [x] **Step 3: 初回提出（ベースラインの実行と提出）**（完了！スコア: **`0.96360`**）
   - [notebooks/01-baseline.ipynb](notebooks/01-baseline.ipynb)：Kaggle上でそのまま動く初提出用ノートブック
   - [src/baseline.py](src/baseline.py)：ローカル（Python）で再現する場合のスクリプト
+  - [learning-log.md](learning-log.md)：実験記録と考察（手元検証と本番スコアの一致確認）
+- [ ] **Step 4: 理解を深める比較実験（Phase 4）**
+  - 複数モデル（ロジスティック回帰、CNN等）の比較や混同行列による誤答パターンの分析
 
 ---
 
-## 9. 【今すぐやること】次に操作する1ステップ
+## 9. 次のステップ（Phase 4: モデル比較と誤答分析）
 
-いよいよ **初回提出（約96%のスコア獲得）** に向けてノートブックを動かしてみましょう！今やる操作はこれだけです：
+初回提出が無事完了し、**96.36%** という素晴らしいベースラインスコアを記録しました！
+次のステップでは、以下のような比較実験を通じて理解を深めます：
+1. **なぜ間違えたのか？**（混同行列を見て「4」と「9」などの見間違い例を可視化する）
+2. **モデルによる違い:** 他のアルゴリズム（ロジスティック回帰やシンプルなCNN）を試してスコアや計算時間を比較する
+3. **学習ログの記録:** [learning-log.md](learning-log.md) に「仮説→実験→考察」を残す習慣を身につける
 
-> 👉 **Kaggleのコンペ画面右上の「Create Notebook」をクリックして、新しいノートブックを立ち上げる**
-> 
-> 🔗 **https://www.kaggle.com/competitions/digit-recognizer**
->
-> ノートブックが開いたら、[`notebooks/01-baseline.ipynb`](notebooks/01-baseline.ipynb) のコードを貼り付けるかインポートし、「Run All」を押すだけで提出用CSV（`submission.csv`）が生成されます！
 
