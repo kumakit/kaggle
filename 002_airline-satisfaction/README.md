@@ -94,5 +94,8 @@ Digit Recognizer では画像専用の「CNN」を使いましたが、**表形�
 - [x] **Step 4: スコア改善と上位へのランクアップ**（完了！スコア: **`0.95954`**、順位: **`1,058位`** 🚀）
   - [src/route_id_te.py](src/route_id_te.py)：路線頻度 ＋ In-Fold Target Encoding 実装
   - [learning-log.md](learning-log.md)：実験 #004 にて **一撃で 633人抜き（1691位 ➔ 1058位）の大躍進** を達成！
+- [x] **Step 5: 3大GBDTアンサンブル（LGB + CB + XGB）と自己ベスト更新**（完了！スコア: **`0.95971`** 🏆）
+  - [src/ensemble_3gbdt.py](src/ensemble_3gbdt.py)：多様性注入XGBoost ＋ 絶妙CatBoost ＋ 精密LightGBM
+  - [learning-log.md](learning-log.md)：実験 #009 にて **自己ベスト更新（0.95971）** を達成！Discussionの限界を突破。
 
 
