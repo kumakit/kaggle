@@ -23,7 +23,7 @@ GitHub Issue（[kumakit/mission-control#402](https://github.com/kumakit/mission-
 | # | コンペ名 | フォルダ | 種別 / タスク | ステータス | ガイドリンク |
 |---|---|---|---|---|---|
 | **001** | **Digit Recognizer** | [`001_digit-recognizer/`](001_digit-recognizer/) | Getting Started / 手書き数字画像分類 (0〜9) | **完了・卒業 (0.99132 / 319位)** | [入門ガイド](001_digit-recognizer/README.md) |
-| **002** | **Playground S6E10 (Airline Satisfaction)** | [`002_airline-satisfaction/`](002_airline-satisfaction/) | Playground / 航空会社顧客満足度予測 (2値分類・ROC AUC) | **自己ベスト 0.95971 / 633人抜き達成！** | [実践ガイド](002_airline-satisfaction/README.md) |
+| **002** | **Playground S6E10 (Airline Satisfaction)** | [`002_airline-satisfaction/`](002_airline-satisfaction/) | Playground / 航空会社顧客満足度予測 (2値分類・ROC AUC) | **自己ベスト 0.96084 / 3桁856位達成！🏆** | [実践ガイド](002_airline-satisfaction/README.md) |
 | 003 | *Store Sales - Time Series Forecasting* | `003_store-sales/` (予定) | Getting Started / 店舗売上の時系列需要予測 | 今後検討 | - |
 
 

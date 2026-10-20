@@ -97,5 +97,9 @@ Digit Recognizer では画像専用の「CNN」を使いましたが、**表形�
 - [x] **Step 5: 3大GBDTアンサンブル（LGB + CB + XGB）と自己ベスト更新**（完了！スコア: **`0.95971`** 🏆）
   - [src/ensemble_3gbdt.py](src/ensemble_3gbdt.py)：多様性注入XGBoost ＋ 絶妙CatBoost ＋ 精密LightGBM
   - [learning-log.md](learning-log.md)：実験 #009 にて **自己ベスト更新（0.95971）** を達成！Discussionの限界を突破。
+- [x] **Step 6: プランB上限突破（元データ教師モデル + 真の路線プロファイル + 6種多重TE）**（完了！スコア: **`0.96084`**、順位: **`856位`** 🚀🏆）
+  - [src/plan_b_ultimate_3gbdt.py](src/plan_b_ultimate_3gbdt.py)：元データ3大教師 ＋ 路線プロファイル20列 ＋ 6種多重TE ＋ 3大GBDTロジットブレンド
+  - [learning-log.md](learning-log.md)：実験 #010 にて **+0.00113急伸・一撃250人抜きで念願の3桁800位台（856位）突入！**
+
 
 
