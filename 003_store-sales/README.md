@@ -81,11 +81,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 
 ## 6. 学習・挑戦ロードマップ
 
-- [ ] **Step 1: コンペ参加規約への同意**
+- [x] **Step 1: コンペ参加規約への同意**（完了！）
   - 公式ページで「Join Competition」を完了。
-- [ ] **Step 2: 最小ベースラインの作成と初回提出**
-  - 単純な曜日別平均、またはシンプルなLightGBM回帰モデルを構築。
-  - Kaggle Notebookから手動提出し、Leaderboardに記録を残す。
+- [x] **Step 2: 最小ベースラインの作成と初回提出**（完了！スコア: **`0.52338`**、順位: **443位** 🎉）
+  - [notebooks/01-baseline.ipynb](notebooks/01-baseline.ipynb)：LightGBM カレンダー特徴量ベースライン
+  - [src/baseline.py](src/baseline.py)：ローカル再現スクリプト
+  - [learning-log.md](learning-log.md)：実験 #001 記録完了
 - [ ] **Step 3: カレンダー・ドメイン特徴量の導入**
   - 曜日・日・月・給与日フラグ・祝日フラグ・地震フラグの付与。
 - [ ] **Step 4: 時系列の真骨頂「ラグ（Lag）特徴量」と「移動統計量」**
