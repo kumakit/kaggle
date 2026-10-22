@@ -10,7 +10,50 @@
 
 | 実験 # | 手法・モデル | 検証スコア (Val RMSLE) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
-| **#001** | **LightGBM カレンダー特徴量 (Time-based Split)** | 約 `0.53` 前後 | **`0.52338`** | **443 位** | **初提出完了！** カレンダー＋カテゴリのみで堅牢なベースライン確立 |
+| **#001** | **LightGBM カレンダー特徴量 (Time-based Split)** | 約 `0.41440` | **`0.52338`** | **443 位** | **初提出完了！** カレンダー＋カテゴリのみで堅牢なベースライン確立 |
+| **#002** | **ドメイン特徴量拡張 (給与日・祝日・店舗メタ・原油価格)** | **`0.41426`** | *提出後に記録* | *提出後に記録* | 特徴量9→22列拡張。原油価格や店舗属性が重要度上位にランクイン |
+
+---
+
+## 実験詳細
+
+### 実験 #002: ドメイン特徴量拡張モデル（5テーブル統合）
+- **実施日:** 2026-10-22
+- **担当・実施者:** 学習者本人（Kaggle Notebook経由で提出）
+
+#### 1. 仮説 (Hypothesis)
+- 単なるカレンダー情報だけでなく、エクアドル特有の経済・商習慣を反映したドメイン特徴量（給与日15日/月末、祝日振替、店舗属性、原油価格）を追加することで、需要変動の波をより精密に捉えられるはず。
+- 特にエクアドルは石油依存国であるため、原油価格（WTI）の推移や店舗の都市・クラスタ情報が売上予測の重要な手掛かりになるはず。
+
+#### 2. 実験内容 (Method)
+- **データ:** `train.csv`, `test.csv`, `stores.csv`, `holidays_events.csv`, `oil.csv`
+- **特徴量 (22列に拡張):**
+  - カレンダー: `year`, `month`, `day`, `dayofweek`, `is_weekend`, `dayofyear`, `weekofyear`, `is_month_start`, `is_month_end`
+  - 給与日: `is_wage_day`（15日または月末）, `is_wage_day_after`（16日または月初）
+  - 震災イベント: `is_earthquake`（2016-04-16から1ヶ月間）
+  - 店舗メタ: `city`, `state`, `store_type`, `cluster`
+  - 祝日: `is_national_holiday`（振替除外、全国公休日）
+  - 原油: `dcoilwtico`（線形補間）, `oil_7d_mean`（7日移動平均）
+- **モデル設定:** LightGBM Regressor (`learning_rate=0.05`, `num_leaves=63`, `n_estimators=1000`)
+- **成果物:**
+  - ノートブック: `003_store-sales/notebooks/02-domain-features.ipynb`
+  - スクリプト: `003_store-sales/src/feature_engineering.py`
+
+#### 3. 結果 (Result)
+- **手元検証スコア (Val RMSLE):** **`0.41426`**（#001の `0.41440` から着実に向上 📈）
+- **特徴量重要度 Top 10:**
+  1. `store_nbr` (20,033)
+  2. `family` (15,409)
+  3. `dayofyear` (5,210)
+  4. `dayofweek` (2,707)
+  5. `onpromotion` (2,657)
+  6. `day` (2,514)
+  7. **`dcoilwtico` (2,375)** 🛢️ 新規
+  8. **`oil_7d_mean` (2,226)** 🛢️ 新規
+  9. **`city` (1,941)** 🏙️ 新規
+  10. **`weekofyear` (1,765)** 📅 新規
+- **Kaggle本番スコア (Public Leaderboard):** 
+- **提出後の順位:** 
 
 ---
 
