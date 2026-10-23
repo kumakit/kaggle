@@ -209,13 +209,15 @@ def main():
     test_pred_log = model.predict(X_test)
     test_pred = np.clip(np.expm1(test_pred_log), 0, None)
 
-    sub_df["sales"] = test_pred
+    # 重要: test_feat はラグ計算時にソートされているため、id 順に揃えて保存する
+    test_feat["sales"] = test_pred
+    submission_df = test_feat[["id", "sales"]].sort_values("id").reset_index(drop=True)
     out_path = "003_store-sales/submission_exp003.csv"
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    sub_df.to_csv(out_path, index=False)
+    submission_df.to_csv(out_path, index=False)
 
-    print(f"\n  - 提出ファイルを保存しました: {out_path}")
-    print(f"  - 先頭5行:\n{sub_df.head()}")
+    print(f"\n  - 提出ファイルを保存しました (id順ソート完了): {out_path}")
+    print(f"  - 先頭5行:\n{submission_df.head()}")
 
 
 if __name__ == "__main__":
