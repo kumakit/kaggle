@@ -86,10 +86,11 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 2: 最小ベースラインの作成と初回提出**（完了！スコア: **`0.52338`**、順位: **443位** 🎉）
   - [notebooks/01-baseline.ipynb](notebooks/01-baseline.ipynb)：LightGBM カレンダー特徴量ベースライン
   - [src/baseline.py](src/baseline.py)：ローカル再現スクリプト
-  - [learning-log.md](learning-log.md)：実験 #001 記録完了
-- [ ] **Step 3: カレンダー・ドメイン特徴量の導入**
-  - 曜日・日・月・給与日フラグ・祝日フラグ・地震フラグの付与。
-- [ ] **Step 4: 時系列の真骨頂「ラグ（Lag）特徴量」と「移動統計量」**
-  - 16日前、21日前、28日前の売上（ラグ）、7日/14日移動平均を導入。
-- [ ] **Step 5: GBDTチューニングとアンサンブル**
-  - LightGBM / CatBoost による回帰モデリングと予測の最適化。
+- [x] **Step 3: カレンダー・ドメイン特徴量の導入**（完了！スコア: `0.52581`）
+  - [notebooks/02-domain-features.ipynb](notebooks/02-domain-features.ipynb)：原油・店舗冗長列の過学習を特定（アブレーション）
+- [x] **Step 4: 時系列の真骨頂「ラグ特徴量」＆「33ファミリー別モデル」**（完了！スコア: **`0.45505`**、順位: **`277位`（166人抜き！🚀）**）
+  - [notebooks/04-family-models.ipynb](notebooks/04-family-models.ipynb)：33ファミリー個別LightGBM ＋ ゼロ売上フィルター
+  - [src/family_models.py](src/family_models.py)：再現スクリプト
+  - [learning-log.md](learning-log.md)：実験 #004 記録完了
+- [ ] **Step 5: GBDTチューニングとアンサンブル（CatBoost / XGBoost / GPU活用）**
+  - RTX 3060 Mobile を活用した多様性アンサンブルと予測の最適化。
