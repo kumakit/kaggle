@@ -92,5 +92,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/04-family-models.ipynb](notebooks/04-family-models.ipynb)：33ファミリー個別LightGBM ＋ ゼロ売上フィルター
   - [src/family_models.py](src/family_models.py)：再現スクリプト
   - [learning-log.md](learning-log.md)：実験 #004 記録完了
-- [ ] **Step 5: GBDTチューニングとアンサンブル（CatBoost / XGBoost / GPU活用）**
-  - RTX 3060 Mobile を活用した多様性アンサンブルと予測の最適化。
+- [x] **Step 5: GBDT多様性アンサンブル ＋ 前年同期ラグ（RTX 4060 GPU活用）**（完了！スコア: **`0.43078`**、順位: **`210位`（さらに67人抜き・累計233人抜き！🎉）**）
+  - [notebooks/05-ensemble-gpu.ipynb](notebooks/05-ensemble-gpu.ipynb)：LightGBM + CatBoost GPU + XGBoost GPU ＋ 52週前同曜日ラグ (`sales_lag_364`)
+  - [src/ensemble_gpu.py](src/ensemble_gpu.py)：GPU並列ローカルスクリプト
+  - [learning-log.md](learning-log.md)：実験 #005 記録完了
+- [ ] **Step 6: さらなる高みへ（特売プロモーションラグ ＆ アンサンブル重み最適化・100位台突入へ）**
+  - 特売情報 `onpromotion` のラグ・先行指標の活用、OOF予測に基づくNelder-Mead最適ブレンド重みの探索。
