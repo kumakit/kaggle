@@ -96,5 +96,7 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/05-ensemble-gpu.ipynb](notebooks/05-ensemble-gpu.ipynb)：LightGBM + CatBoost GPU + XGBoost GPU ＋ 52週前同曜日ラグ (`sales_lag_364`)
   - [src/ensemble_gpu.py](src/ensemble_gpu.py)：GPU並列ローカルスクリプト
   - [learning-log.md](learning-log.md)：実験 #005 記録完了
-- [ ] **Step 6: さらなる高みへ（特売プロモーションラグ ＆ アンサンブル重み最適化・100位台突入へ）**
-  - 特売情報 `onpromotion` のラグ・先行指標の活用、OOF予測に基づくNelder-Mead最適ブレンド重みの探索。
+- [ ] **Step 6: 特売プロモーション先行・後行特徴量 ＆ 3大GBDTアンサンブル（実験 #006・100位台突入へ）**
+  - [notebooks/06-promo-features.ipynb](notebooks/06-promo-features.ipynb)：特売リード（Lead 1/2）・ラグ（Lag 1/2/7）・差分・移動平均特徴量
+  - [src/promo_features.py](src/promo_features.py)：再現スクリプト
+  - 手元検証スコア: **`0.40074`**（前回 `0.40163` からさらに改善、0.400目前！）
