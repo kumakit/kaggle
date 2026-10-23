@@ -18,19 +18,27 @@ import lightgbm as lgb
 def find_data_dir() -> str:
     """ローカルまたはKaggle Notebook環境のデータディレクトリを自動検出する"""
     candidates = [
+        "/kaggle/input/store-sales-time-series-forecasting",
+        "/kaggle/input/competitions/store-sales-time-series-forecasting",
         "003_store-sales/data",
         "data",
         "../data",
-        "/kaggle/input/competitions/store-sales-time-series-forecasting",
-        "/kaggle/input/store-sales-time-series-forecasting",
     ]
     for c in candidates:
         if os.path.exists(os.path.join(c, "train.csv")):
             return c
-    # 再帰探索
-    matches = glob.glob("**/store-sales-time-series-forecasting/train.csv", recursive=True)
+    matches = glob.glob("/kaggle/input/**/train.csv", recursive=True)
     if matches:
         return os.path.dirname(matches[0])
+    matches_local = glob.glob("**/train.csv", recursive=True)
+    if matches_local:
+        return os.path.dirname(matches_local[0])
+    if os.path.exists("/kaggle/input"):
+        input_contents = os.listdir("/kaggle/input")
+        raise FileNotFoundError(
+            f"/kaggle/input 配下に train.csv が見つかりませんでした。現在の中身: {input_contents}。"
+            '右上の [+ Add Input] から "store-sales-time-series-forecasting" を追加してください。'
+        )
     raise FileNotFoundError("train.csv が見つかりませんでした。データディレクトリを確認してください。")
 
 
