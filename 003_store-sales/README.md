@@ -100,5 +100,7 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/06-promo-features.ipynb](notebooks/06-promo-features.ipynb)：特売リード（Lead 1/2）・ラグ（Lag 1/2/7）・差分・移動平均特徴量
   - [src/promo_features.py](src/promo_features.py)：再現スクリプト
   - [learning-log.md](learning-log.md)：実験 #006 記録完了
-- [ ] **Step 7: ついに2桁順位・メダル圏（Top 10% / 100位切り）へ！**
-  - アンサンブル重みの数理最適化（Scipy Nelder-Mead探索）、店舗・商品別の年間成長トレンド補正。
+- [ ] **Step 7: ファミリー別アンサンブル重み数理最適化（実験 #007・2桁順位/100位切りへ挑戦）**
+  - [notebooks/07-optimize-weights.ipynb](notebooks/07-optimize-weights.ipynb)：SciPy SLSQP による各カテゴリの黄金比率探索
+  - [src/optimize_weights.py](src/optimize_weights.py)：再現スクリプト
+  - 手元検証スコア: **`0.39776`**（固定重み `0.40072` から -0.00296 改善、念願の0.3点台突入！📈）
