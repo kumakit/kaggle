@@ -96,7 +96,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/05-ensemble-gpu.ipynb](notebooks/05-ensemble-gpu.ipynb)：LightGBM + CatBoost GPU + XGBoost GPU ＋ 52週前同曜日ラグ (`sales_lag_364`)
   - [src/ensemble_gpu.py](src/ensemble_gpu.py)：GPU並列ローカルスクリプト
   - [learning-log.md](learning-log.md)：実験 #005 記録完了
-- [ ] **Step 6: 特売プロモーション先行・後行特徴量 ＆ 3大GBDTアンサンブル（実験 #006・100位台突入へ）**
+- [x] **Step 6: 特売プロモーション先行・後行特徴量 ＆ 3大GBDTアンサンブル**（完了！スコア: **`0.41064`**、順位: **`149位`（さらに61人抜き・累計294人抜き！🚀）**）
   - [notebooks/06-promo-features.ipynb](notebooks/06-promo-features.ipynb)：特売リード（Lead 1/2）・ラグ（Lag 1/2/7）・差分・移動平均特徴量
   - [src/promo_features.py](src/promo_features.py)：再現スクリプト
-  - 手元検証スコア: **`0.40074`**（前回 `0.40163` からさらに改善、0.400目前！）
+  - [learning-log.md](learning-log.md)：実験 #006 記録完了
+- [ ] **Step 7: ついに2桁順位・メダル圏（Top 10% / 100位切り）へ！**
+  - アンサンブル重みの数理最適化（Scipy Nelder-Mead探索）、店舗・商品別の年間成長トレンド補正。
