@@ -115,3 +115,7 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/10-advanced-recursive.ipynb](notebooks/10-advanced-recursive.ipynb)：給与日前倒し ＆ 元旦除外 ＆ 特売平常比 (Promotion Intensity)
   - [src/advanced_recursive.py](src/advanced_recursive.py)：再現スクリプト
   - [learning-log.md](learning-log.md)：実験 #010 記録完了（大幅自己ベスト更新、メダル圏目前！）
+- [x] **Step 11: メダル圏突破パック（ゼロ誤爆救済 ＆ 店舗52純化 ＆ 2シード平均）**（完了！手元スコア: `0.39765`、自己ベスト76位維持）
+  - [notebooks/11-medal-pack.ipynb](notebooks/11-medal-pack.ipynb)：アンバト祝日 ＆ 店舗52純化 ＆ 2シード・アベレージング
+  - [src/medal_pack_recursive.py](src/medal_pack_recursive.py)：再現スクリプト
+  - [learning-log.md](learning-log.md)：実験 #011 記録完了（手元検証0.397点到達、ゼロクリップ感度を特定）
