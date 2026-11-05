@@ -111,3 +111,7 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 9: ハイブリッド・モデリング（Trend + 残差学習）検証**（完了！スコア: `0.41421`、自己ベスト82位維持）
   - [src/hybrid_forecasting.py](src/hybrid_forecasting.py)：Ridge トレンド ＋ GBDT 残差スクリプト
   - [learning-log.md](learning-log.md)：実験 #009 記録完了（原系列ラグの重要性と再帰モデルの動的水準追従力を実証）
+- [x] **Step 10: 進化版再帰予測 ＆ ドメイン精密化 ＆ 特売平常比パック**（完了！スコア: **`0.38968`**、順位: **`76位`（さらに6人抜き！累計367人抜き！🎉 ついに 0.38 台突入！🚀）**）
+  - [notebooks/10-advanced-recursive.ipynb](notebooks/10-advanced-recursive.ipynb)：給与日前倒し ＆ 元旦除外 ＆ 特売平常比 (Promotion Intensity)
+  - [src/advanced_recursive.py](src/advanced_recursive.py)：再現スクリプト
+  - [learning-log.md](learning-log.md)：実験 #010 記録完了（大幅自己ベスト更新、メダル圏目前！）
