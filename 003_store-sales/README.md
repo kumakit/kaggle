@@ -100,7 +100,11 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/06-promo-features.ipynb](notebooks/06-promo-features.ipynb)：特売リード（Lead 1/2）・ラグ（Lag 1/2/7）・差分・移動平均特徴量
   - [src/promo_features.py](src/promo_features.py)：再現スクリプト
   - [learning-log.md](learning-log.md)：実験 #006 記録完了
-- [ ] **Step 7: ファミリー別アンサンブル重み数理最適化（実験 #007・2桁順位/100位切りへ挑戦）**
+- [x] **Step 7: ファミリー別アンサンブル重み数理最適化**（完了！スコア: `0.41188`、順位: 155位）
   - [notebooks/07-optimize-weights.ipynb](notebooks/07-optimize-weights.ipynb)：SciPy SLSQP による各カテゴリの黄金比率探索
   - [src/optimize_weights.py](src/optimize_weights.py)：再現スクリプト
-  - 手元検証スコア: **`0.39776`**（固定重み `0.40072` から -0.00296 改善、念願の0.3点台突入！📈）
+  - [learning-log.md](learning-log.md)：実験 #007 記録完了（手元0.3点台達成、固定重みの汎化力を立証）
+- [x] **Step 8: 再帰的マルチステップ予測 ＆ 直近ラグ完全解禁**（完了！スコア: **`0.39084`**、順位: **`82位`（一撃73人抜き！累計361人抜き！🎉 念願の100位切り・2桁順位達成！🚀）**）
+  - [notebooks/08-recursive-forecasting.ipynb](notebooks/08-recursive-forecasting.ipynb)：直近Lag 1〜15完全解禁 ＆ 1日ずつ順次予測する再帰推論
+  - [src/recursive_forecasting.py](src/recursive_forecasting.py)：再現スクリプト
+  - [learning-log.md](learning-log.md)：実験 #008 記録完了（-0.01980 特大ブレイクスルー！）
