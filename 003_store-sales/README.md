@@ -123,3 +123,7 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/12-blending.ipynb](notebooks/12-blending.ipynb)：Exp #010 (60%) + Exp #011 (30%) + Exp #008 (10%) の対数空間加重融合 ＆ 124系列ゼロクリップ
   - [src/blend_top_models.py](src/blend_top_models.py)：ブレンド推論スクリプト
   - [learning-log.md](learning-log.md)：実験 #012 記録完了（メダル圏 Top 10% / 54位: 0.38602 まで残り 0.00306 / 17人抜き！）
+- [x] **Step 13: 店舗・商品 × 曜日別ベースライン (Day-of-Week Group Mean) ＆ 再帰推論**（完了！スコア: **`0.38972`**、自己ベスト71位堅持）
+  - [notebooks/13-dow-group-features.ipynb](notebooks/13-dow-group-features.ipynb)：店舗・カテゴリの曜日別平均売上 ＆ 系列同曜日4週平均ラグ特徴量
+  - [src/dow_group_features.py](src/dow_group_features.py)：再現スクリプト
+  - [learning-log.md](learning-log.md)：実験 #013 記録完了（単体0.38台達成、ブレンド用新ピース獲得）
