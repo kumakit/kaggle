@@ -127,3 +127,16 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/13-dow-group-features.ipynb](notebooks/13-dow-group-features.ipynb)：店舗・カテゴリの曜日別平均売上 ＆ 系列同曜日4週平均ラグ特徴量
   - [src/dow_group_features.py](src/dow_group_features.py)：再現スクリプト
   - [learning-log.md](learning-log.md)：実験 #013 記録完了（単体0.38台達成、ブレンド用新ピース獲得）
+
+---
+
+## 7. Google Colab (T4 GPU) による大規模学習環境
+
+Google AI Pro の特典（200 CU/月）を活用し、ローカル環境（Intel N100）の計算制約を超えて **GBDT 1,000本の大規模アンサンブル学習** を行うためのクラウド実行環境です。
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kumakit/kaggle/blob/main/003_store-sales/notebooks/colab_gpu_training.ipynb)
+- ノートブック: [notebooks/colab_gpu_training.ipynb](notebooks/colab_gpu_training.ipynb)
+- **特徴:**
+  - T4 GPU 環境で CatBoost GPU ＋ XGBoost GPU ＋ LightGBM を各 1,000 本学習
+  - Colab Secrets 🔑 または Google Drive 経由で Kaggle API 認証を自動化
+  - 推論完了後、Colab からワンクリックで Kaggle 本番へ直接提出可能
