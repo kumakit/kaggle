@@ -130,6 +130,10 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 14: Google Colab (T4 GPU) 大規模 1,000 木 GBDT アンサンブル ＆ クラウド直接提出**（完了！スコア: **`0.39019`**、クラウド実行パイプライン完全確立🎉）
   - [notebooks/colab_gpu_training.ipynb](notebooks/colab_gpu_training.ipynb)：CatBoost GPU ＋ XGBoost GPU ＋ LightGBM 各1,000木学習 ＆ Kaggle API 直接提出
   - [learning-log.md](learning-log.md)：実験 #014 記録完了（Google AI Pro 200 CU 連携達成、所要時間数分）
+- [x] **Step 15: 4大トップモデル対数空間加重ブレンド (Exp012+Exp014 Colab+Exp013+Exp010)**（完了！スコア: **`0.38856`**、順位: **`69位`（ついに60位台突入！自己ベスト更新！🏆）**）
+  - [notebooks/15-ultimate-blend.ipynb](notebooks/15-ultimate-blend.ipynb)：Colab T4 GPU 1,000木 ＋ ローカル最高峰モデル群の対数幾何平均
+  - [src/ultimate_blend.py](src/ultimate_blend.py)：アルティメットブレンド推論スクリプト
+  - [learning-log.md](learning-log.md)：実験 #015 記録完了（メダル圏 Top 10% / 54位: 0.38602 まで残り 0.00254 / 15人抜き！）
 
 ---
 
