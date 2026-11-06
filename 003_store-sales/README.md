@@ -119,3 +119,7 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/11-medal-pack.ipynb](notebooks/11-medal-pack.ipynb)：アンバト祝日 ＆ 店舗52純化 ＆ 2シード・アベレージング
   - [src/medal_pack_recursive.py](src/medal_pack_recursive.py)：再現スクリプト
   - [learning-log.md](learning-log.md)：実験 #011 記録完了（手元検証0.397点到達、ゼロクリップ感度を特定）
+- [x] **Step 12: 3大トップモデル対数空間加重ブレンド ＆ 直近21日ゼロフィルター**（完了！スコア: **`0.38908`**、順位: **`71位`（さらに5人抜き！累計372人抜き！🎉 自己ベスト更新！🏆）**）
+  - [notebooks/12-blending.ipynb](notebooks/12-blending.ipynb)：Exp #010 (60%) + Exp #011 (30%) + Exp #008 (10%) の対数空間加重融合 ＆ 124系列ゼロクリップ
+  - [src/blend_top_models.py](src/blend_top_models.py)：ブレンド推論スクリプト
+  - [learning-log.md](learning-log.md)：実験 #012 記録完了（メダル圏 Top 10% / 54位: 0.38602 まで残り 0.00306 / 17人抜き！）
