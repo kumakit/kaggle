@@ -127,6 +127,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/13-dow-group-features.ipynb](notebooks/13-dow-group-features.ipynb)：店舗・カテゴリの曜日別平均売上 ＆ 系列同曜日4週平均ラグ特徴量
   - [src/dow_group_features.py](src/dow_group_features.py)：再現スクリプト
   - [learning-log.md](learning-log.md)：実験 #013 記録完了（単体0.38台達成、ブレンド用新ピース獲得）
+- [x] **Step 14: Google Colab (T4 GPU) 大規模 1,000 木 GBDT アンサンブル ＆ クラウド直接提出**（完了！スコア: **`0.39019`**、クラウド実行パイプライン完全確立🎉）
+  - [notebooks/colab_gpu_training.ipynb](notebooks/colab_gpu_training.ipynb)：CatBoost GPU ＋ XGBoost GPU ＋ LightGBM 各1,000木学習 ＆ Kaggle API 直接提出
+  - [learning-log.md](learning-log.md)：実験 #014 記録完了（Google AI Pro 200 CU 連携達成、所要時間数分）
 
 ---
 
