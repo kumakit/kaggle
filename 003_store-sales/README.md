@@ -134,6 +134,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [notebooks/15-ultimate-blend.ipynb](notebooks/15-ultimate-blend.ipynb)：Colab T4 GPU 1,000木 ＋ ローカル最高峰モデル群の対数幾何平均
   - [src/ultimate_blend.py](src/ultimate_blend.py)：アルティメットブレンド推論スクリプト
   - [learning-log.md](learning-log.md)：実験 #015 記録完了（メダル圏 Top 10% / 54位: 0.38602 まで残り 0.00254 / 15人抜き！）
+- [x] **Step 16: Google Colab 高速GPU 2シード 800木 ＆ Googleドライブ自動同期**（完了！スコア: `0.39040`、G:\マイドライブ同期開通🎉）
+  - [src/colab_gpu_train.py](src/colab_gpu_train.py)：2シード (Seed 42, 2026) × 各800木 GPU スクリプト
+  - [learning-log.md](learning-log.md)：実験 #016 記録完了
+- [x] **Step 17: メダル圏突入 ファイナルブレンド**（完了！スコア: `0.38886`、自己ベスト 69位 / 0.38856 堅持）
+  - [src/final_medal_blend.py](src/final_medal_blend.py)：Exp #015 (60%) + Exp #016 (25%) + Exp #014 (15%) ブレンドスクリプト
+  - [learning-log.md](learning-log.md)：実験 #017 記録完了
 
 ---
 
