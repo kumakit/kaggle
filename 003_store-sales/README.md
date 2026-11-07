@@ -143,6 +143,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 18: Colab L4 GPU 特売精緻化 2シード 1,000木 ＆ 完全自動実行パイプライン**（完了！スコア: `0.39119`、Val: `0.39882`🎉）
   - [src/exp018_colab_l4_promo.py](src/exp018_colab_l4_promo.py)：Colab CLI（colab run --gpu L4）完全自動実行スクリプト
   - [learning-log.md](learning-log.md)：実験 #018 記録完了（特売シェア・フラグ・減衰リード、最大ダイバーシティ獲得）
+- [x] **Step 19: メダル圏ブレイクスルー・アンサンブル**（完了！スコア: `0.38878`、**公式 68 位浮上！累計 375 人抜き！🏆**）
+  - [src/breakthrough_medal_blend.py](src/breakthrough_medal_blend.py)：Exp #015 (50%) + Exp #018 (30%) + Exp #013 (15%) + Exp #016 (5%)
+  - [learning-log.md](learning-log.md)：実験 #019 記録完了（メダル圏 Rank 54: 0.38649 まで残り 0.00207 / 14人抜き！）
 
 ---
 
