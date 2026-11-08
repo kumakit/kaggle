@@ -152,6 +152,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 21: 5シード黄金メダルブレンド**（完了！スコア: `0.38878`、0.388超高密度クラスタ確立🏆）
   - [src/medal_gold_blend.py](src/medal_gold_blend.py)：Exp #015 (50%) + Exp #020 (35%) + Exp #013 (15%) ブレンドスクリプト
   - [learning-log.md](learning-log.md)：実験 #021 記録完了（メダル圏 Rank 55: 0.38653 まで残り 0.00203 / 残り 3 回）
+- [x] **Step 22: Colab L4 GPU 2段階モデリング (店舗客数 -> 5シード売上)**（完了！スコア: `0.40632`、Val: `0.38963`）
+  - [src/exp022_colab_l4_2stage.py](src/exp022_colab_l4_2stage.py)：店舗別客数予測 ＋ 5シード 1,000木 GBDT
+  - [learning-log.md](learning-log.md)：実験 #022 記録完了（Train-Test Discrepancy の特定と相関 0.99879 の超異質空間獲得）
 
 ---
 
