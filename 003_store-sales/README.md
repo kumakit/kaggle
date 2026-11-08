@@ -158,6 +158,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 23: 4大系統メダルスパイスブレンド**（完了！スコア: `0.38873`、自己ベストに肉薄＆スコア改善🏆）
   - [src/medal_spice_blend.py](src/medal_spice_blend.py)：Exp #015 (50%) + Exp #020 (33%) + Exp #013 (14%) + Exp #022客数スパイス (3%) ブレンドスクリプト
   - [learning-log.md](learning-log.md)：実験 #023 記録完了（超異質モデルの3%スパイス効果でExp021から-0.00005前進 / 残り1回）
+- [x] **Step 24: Colab L4 GPU 深層決定木 5シード 1,000木 GBDT**（完了！Val: **`0.39729`（手元過去最高更新！）**🚀）
+  - [src/exp024_colab_l4_deep.py](src/exp024_colab_l4_deep.py)：LGBM num_leaves 45 / CB depth 7 / XGB max_depth 6 / lr 0.030 5シード 1,000木 スクリプト
+  - [learning-log.md](learning-log.md)：実験 #024 記録完了（単体モデル手元過去最高記録 0.39729 達成）
+- [x] **Step 25: 深層5シード メダルブレイクスルー・ブレンド**（完了！スコア: **`0.38808`**、**公式 66 位浮上！自己ベスト特大更新！🏆**）
+  - [src/deep_medal_blend.py](src/deep_medal_blend.py)：Exp #015 (45%) + Exp #024深層5S (25%) + Exp #020 (15%) + Exp #013 (12%) + Exp #022客数 (3%) ブレンドスクリプト
+  - [learning-log.md](learning-log.md)：実験 #025 記録完了（メダル圏 Rank 55: 0.38653 まで残り 0.00155 / 11人抜き！上位11.9%到達）
 
 ---
 
