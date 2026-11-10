@@ -164,6 +164,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 25: 深層5シード メダルブレイクスルー・ブレンド**（完了！スコア: **`0.38808`**、**公式 66 位浮上！自己ベスト特大更新！🏆**）
   - [src/deep_medal_blend.py](src/deep_medal_blend.py)：Exp #015 (45%) + Exp #024深層5S (25%) + Exp #020 (15%) + Exp #013 (12%) + Exp #022客数 (3%) ブレンドスクリプト
   - [learning-log.md](learning-log.md)：実験 #025 記録完了（メダル圏 Rank 55: 0.38653 まで残り 0.00155 / 11人抜き！上位11.9%到達）
+- [x] **Step 26: 新学期シーズン特需ドメイン補正 (School Season Dynamic Boost)**（完了！スコア: `0.38816`、自己ベスト 0.38808 堅持）
+  - [src/exp026_school_boost.py](src/exp026_school_boost.py)：Sierra/Amazonia 学用品動的カーブブースト
+  - [learning-log.md](learning-log.md)：実験 #026 記録完了（496行の局所変更でスコア感度を確認、残り4回）
 
 ---
 
