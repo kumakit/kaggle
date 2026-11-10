@@ -182,6 +182,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 31: 客数スパイス微量添加チューニング**（完了！スコア: **`0.38795`**、**4連続0.387台制覇！**🏆）
   - [src/exp031_spice_micro_tuning.py](src/exp031_spice_micro_tuning.py)：Exp #030 (98.5%) + Exp #022客数 (1.5%) チューニングスクリプト
   - [learning-log.md](learning-log.md)：実験 #031 記録完了（0.3879台の平坦極小値を実証、本日5/5枠完全消化）
+- [x] **Step 32: Colab L4 GPU 震災減衰 ＆ 祝日精緻化 5シード 1,000木 GBDT**（完了！手元 Val: **`0.39835`**）
+  - [src/exp032_colab_l4_earthquake_holidays.py](src/exp032_colab_l4_earthquake_holidays.py)：2016年M7.8地震指数減衰＋全国・州・都市祝日（8/24 Ambato等）＋祝日前日（56特徴量）L4 GPU学習スクリプト
+  - [learning-log.md](learning-log.md)：実験 #032 記録完了（相関0.99941と優れた非冗長性を獲得）
+- [ ] **Step 33: 7大モデル 33ファミリー別 SLSQP 数理最適化ブレンド**（推論完了！朝9:00提出枠復活待ち）
+  - [src/exp033_7models_blend.py](src/exp033_7models_blend.py)：Exp #032 を統合した 7大トップモデル全33商品カテゴリ個別 SLSQP 最適化スクリプト
+  - [learning-log.md](learning-log.md)：実験 #033 記録完了（主要カテゴリでExp032が上限25%フル配分）
 
 ---
 
