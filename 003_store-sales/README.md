@@ -170,6 +170,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 27: 33ファミリー別数理最適化ブレンド (SLSQP Krogh-Vedelsby)**（完了！スコア: **`0.38794`**、**ついに念願の 0.387 台突入！自己ベスト更新！🏆**）
   - [src/exp027_adaptive_blend.py](src/exp027_adaptive_blend.py)：全33商品カテゴリ個別 SLSQP アンサンブル多様性最適化スクリプト
   - [learning-log.md](learning-log.md)：実験 #027 記録完了（メダル圏 Rank 58: 0.38653 まで残りわずか 0.00141！残り3回）
+- [x] **Step 28: Colab L4 GPU 新学期・カレンダー特徴量学習 深層 5シード GBDT**（完了！Val: **`0.39754`**🚀）
+  - [src/exp028_colab_l4_calendar.py](src/exp028_colab_l4_calendar.py)：新学期フラグ・直前週末・給与日前日・特売変化率 50特徴量 5シード 1,000木 スクリプト
+  - [learning-log.md](learning-log.md)：実験 #028 記録完了（手元超高精度 0.39754 達成）
+- [x] **Step 29: 6大トップモデル 33ファミリー別 SLSQP 最適化ブレンド**（完了！スコア: **`0.38797`**、0.387台超高精度クラスタ確立🏆）
+  - [src/exp029_6models_blend.py](src/exp029_6models_blend.py)：Exp #028 を統合した 6大モデル全33商品カテゴリ個別 SLSQP 最適化スクリプト
+  - [learning-log.md](learning-log.md)：実験 #029 記録完了（2連続で0.387台完全再現、残り2回）
 
 ---
 
