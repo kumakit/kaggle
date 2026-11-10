@@ -167,6 +167,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 26: 新学期シーズン特需ドメイン補正 (School Season Dynamic Boost)**（完了！スコア: `0.38816`、自己ベスト 0.38808 堅持）
   - [src/exp026_school_boost.py](src/exp026_school_boost.py)：Sierra/Amazonia 学用品動的カーブブースト
   - [learning-log.md](learning-log.md)：実験 #026 記録完了（496行の局所変更でスコア感度を確認、残り4回）
+- [x] **Step 27: 33ファミリー別数理最適化ブレンド (SLSQP Krogh-Vedelsby)**（完了！スコア: **`0.38794`**、**ついに念願の 0.387 台突入！自己ベスト更新！🏆**）
+  - [src/exp027_adaptive_blend.py](src/exp027_adaptive_blend.py)：全33商品カテゴリ個別 SLSQP アンサンブル多様性最適化スクリプト
+  - [learning-log.md](learning-log.md)：実験 #027 記録完了（メダル圏 Rank 58: 0.38653 まで残りわずか 0.00141！残り3回）
 
 ---
 
