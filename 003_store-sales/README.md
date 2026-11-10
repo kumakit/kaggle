@@ -176,6 +176,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 29: 6大トップモデル 33ファミリー別 SLSQP 最適化ブレンド**（完了！スコア: **`0.38797`**、0.387台超高精度クラスタ確立🏆）
   - [src/exp029_6models_blend.py](src/exp029_6models_blend.py)：Exp #028 を統合した 6大モデル全33商品カテゴリ個別 SLSQP 最適化スクリプト
   - [learning-log.md](learning-log.md)：実験 #029 記録完了（2連続で0.387台完全再現、残り2回）
+- [x] **Step 30: デュアル数学的最適化 黄金ブレンド**（完了！スコア: **`0.38793`**、**自己ベスト更新！過去最高スコア達成！🏆**）
+  - [src/exp030_dual_optimal_blend.py](src/exp030_dual_optimal_blend.py)：Exp #027 (50%) + Exp #029 (50%) 二重アンサンブルスクリプト
+  - [learning-log.md](learning-log.md)：実験 #030 記録完了（3連続で0.387台完全再現、自己ベスト0.38793更新！残り1回）
 
 ---
 
