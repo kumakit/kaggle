@@ -1,0 +1,117 @@
+[{"stream_name":"stderr","time":8.249185863,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.249251712,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.249257209,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.249260666,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.033061232,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.033096602,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.033102256,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.033107611,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":17.909986683,"data":"competition data: /kaggle/input/competitions/playground-series-s6e11\n"}
+,{"stream_name":"stdout","time":17.910024302,"data":"original data   : /kaggle/input/datasets/uditjain13/credit-card-fraud-detection-2026/credit_card_fraud_2026.csv\n"}
+,{"stream_name":"stdout","time":17.910030316,"data":"lightgbm 4.6.0 · scikit-learn 1.6.1 · pandas 2.3.3 · 4 CPU threads\n"}
+,{"stream_name":"stdout","time":21.245538683,"data":"train (699960, 26) · test (299984, 25)\n"}
+,{"stream_name":"stdout","time":21.245589715,"data":"13 numeric · 6 yes/no flags · 5 categorical\n"}
+,{"stream_name":"stdout","time":21.45842495,"data":"missing values: train 0, test 0\n"}
+,{"stream_name":"stdout","time":22.248548405,"data":"duplicate feature rows: train 0, test 0\n"}
+,{"stream_name":"stdout","time":22.248583948,"data":"fraud: 11,689 of 699,960 rows = 1.67%\n"}
+,{"stream_name":"stdout","time":22.248589337,"data":"accuracy of always answering 'not fraud': 98.33%\n"}
+,{"stream_name":"stdout","time":28.347616021,"data":"Fraud rate by CVV retries:\n"}
+,{"stream_name":"stdout","time":50.464850698,"data":"adversarial validation AUC (train vs test): 0.5000\n"}
+,{"stream_name":"stdout","time":50.614279467,"data":"rows with no flag: 78.5% of all rows, fraud rate 0.70%\n"}
+,{"stream_name":"stdout","time":50.614315561,"data":"frauds with no flag: 3,870 of 11,689 = 33% of all fraud\n"}
+,{"stream_name":"stdout","time":57.630584478,"data":"  fold 0: AUC 0.94130\n"}
+,{"stream_name":"stdout","time":63.512486734,"data":"  fold 1: AUC 0.94360\n"}
+,{"stream_name":"stdout","time":69.61343387,"data":"  fold 2: AUC 0.94664\n"}
+,{"stream_name":"stdout","time":75.437777393,"data":"  fold 3: AUC 0.94168\n"}
+,{"stream_name":"stdout","time":81.888454597,"data":"  fold 4: AUC 0.93630\n"}
+,{"stream_name":"stdout","time":82.170040251,"data":"Step 0 · Logistic regression, raw columns: CV AUC 0.94187\n"}
+,{"stream_name":"stdout","time":82.901193654,"data":"saved submission_A_logreg.csv (299,984 rows)\n"}
+,{"stream_name":"stdout","time":129.763668774,"data":"  seed 0 fold 0: AUC 0.94491 · 412 trees\n"}
+,{"stream_name":"stdout","time":176.769788393,"data":"  seed 0 fold 1: AUC 0.94856 · 428 trees\n"}
+,{"stream_name":"stdout","time":224.628493073,"data":"  seed 0 fold 2: AUC 0.95067 · 438 trees\n"}
+,{"stream_name":"stdout","time":268.773529979,"data":"  seed 0 fold 3: AUC 0.94700 · 379 trees\n"}
+,{"stream_name":"stdout","time":314.788361674,"data":"  seed 0 fold 4: AUC 0.94214 · 413 trees\n"}
+,{"stream_name":"stdout","time":314.789667209,"data":"Step 1 · LightGBM, 31 leaves, raw columns: CV AUC 0.94663   (+0.00476 vs step 0)\n"}
+,{"stream_name":"stdout","time":1173.692763461,"data":"  seed 0 fold 0: AUC 0.94592 · 1996 trees\n"}
+,{"stream_name":"stdout","time":1350.517714183,"data":"  seed 0 fold 1: AUC 0.94944 · 3188 trees\n"}
+,{"stream_name":"stdout","time":1510.684189881,"data":"  seed 0 fold 2: AUC 0.95211 · 2825 trees\n"}
+,{"stream_name":"stdout","time":1601.369112838,"data":"  seed 0 fold 3: AUC 0.94774 · 1485 trees\n"}
+,{"stream_name":"stdout","time":1704.235626597,"data":"  seed 0 fold 4: AUC 0.94333 · 1715 trees\n"}
+,{"stream_name":"stdout","time":1704.237023723,"data":"Step 2 · LightGBM, 4 leaves, raw columns: CV AUC 0.94771   (+0.00108 vs step 1)\n"}
+,{"stream_name":"stdout","time":1942.94983935,"data":"fold-0 AUC with the leaky encoding: 0.98136   \u003c- too good to be true\n"}
+,{"stream_name":"stdout","time":2024.135653396,"data":"  seed 0 fold 0: AUC 0.94712 · 1119 trees\n"}
+,{"stream_name":"stdout","time":2139.569597247,"data":"  seed 0 fold 1: AUC 0.95078 · 1849 trees\n"}
+,{"stream_name":"stdout","time":2223.03082662,"data":"  seed 0 fold 2: AUC 0.95382 · 1210 trees\n"}
+,{"stream_name":"stdout","time":2326.117327011,"data":"  seed 0 fold 3: AUC 0.94934 · 1616 trees\n"}
+,{"stream_name":"stdout","time":2404.469873125,"data":"  seed 0 fold 4: AUC 0.94325 · 1074 trees\n"}
+,{"stream_name":"stdout","time":2404.727291201,"data":"Step 3 · + per-value target encoding (24 columns): CV AUC 0.94884   (+0.00113 vs step 2)\n"}
+,{"stream_name":"stdout","time":2405.423705149,"data":"saved submission_B_lgb_te.csv (299,984 rows)\n"}
+,{"stream_name":"stdout","time":2415.400452797,"data":"6 float columns x 6 keys = 36 digit keys · 60 encoded columns in total\n"}
+,{"stream_name":"stdout","time":2561.205093929,"data":"  seed 0 fold 0: AUC 0.94939 · 1617 trees\n"}
+,{"stream_name":"stdout","time":2662.580285714,"data":"  seed 0 fold 1: AUC 0.95121 · 1046 trees\n"}
+,{"stream_name":"stdout","time":2775.180221368,"data":"  seed 0 fold 2: AUC 0.95521 · 1212 trees\n"}
+,{"stream_name":"stdout","time":2879.036340639,"data":"  seed 0 fold 3: AUC 0.95122 · 1297 trees\n"}
+,{"stream_name":"stdout","time":2996.150828772,"data":"  seed 0 fold 4: AUC 0.94478 · 1282 trees\n"}
+,{"stream_name":"stdout","time":2996.15215785,"data":"Step 4 · + digit keys (60 encoded columns): CV AUC 0.95031   (+0.00147 vs step 3)\n"}
+,{"stream_name":"stdout","time":3116.911064814,"data":"  seed 1 fold 0: AUC 0.94947 · 1333 trees\n"}
+,{"stream_name":"stdout","time":3218.814833663,"data":"  seed 1 fold 1: AUC 0.95092 · 1071 trees\n"}
+,{"stream_name":"stdout","time":3318.47613805,"data":"  seed 1 fold 2: AUC 0.95488 · 1026 trees\n"}
+,{"stream_name":"stdout","time":3420.806441932,"data":"  seed 1 fold 3: AUC 0.95124 · 1067 trees\n"}
+,{"stream_name":"stdout","time":3530.368529597,"data":"  seed 1 fold 4: AUC 0.94419 · 1161 trees\n"}
+,{"stream_name":"stdout","time":3636.188246337,"data":"  seed 2 fold 0: AUC 0.94950 · 1114 trees\n"}
+,{"stream_name":"stdout","time":3763.003501395,"data":"  seed 2 fold 1: AUC 0.95097 · 1423 trees\n"}
+,{"stream_name":"stdout","time":3902.847614446,"data":"  seed 2 fold 2: AUC 0.95537 · 1615 trees\n"}
+,{"stream_name":"stdout","time":3994.086675616,"data":"  seed 2 fold 3: AUC 0.95132 · 904 trees\n"}
+,{"stream_name":"stdout","time":4105.338985542,"data":"  seed 2 fold 4: AUC 0.94452 · 1197 trees\n"}
+,{"stream_name":"stdout","time":4105.557090968,"data":"Step 5 · + seed bagging (3 encoding seeds): CV AUC 0.95051   (+0.00019 vs step 4)\n"}
+,{"stream_name":"stdout","time":4116.537514531,"data":"13 pair keys for the GLM · 73 encoded columns in the GLM\n"}
+,{"stream_name":"stdout","time":4210.919556092,"data":"  seed 0 fold 0: GLM 0.94966 (converged in 10 iterations) -\u003e GLM + trees 0.95030 · 642 trees\n"}
+,{"stream_name":"stdout","time":4306.694947623,"data":"  seed 0 fold 1: GLM 0.95117 (converged in 10 iterations) -\u003e GLM + trees 0.95176 · 825 trees\n"}
+,{"stream_name":"stdout","time":4380.116440502,"data":"  seed 0 fold 2: GLM 0.95554 (converged in 10 iterations) -\u003e GLM + trees 0.95578 · 360 trees\n"}
+,{"stream_name":"stdout","time":4484.597767357,"data":"  seed 0 fold 3: GLM 0.95096 (converged in 10 iterations) -\u003e GLM + trees 0.95157 · 833 trees\n"}
+,{"stream_name":"stdout","time":4541.84997136,"data":"  seed 0 fold 4: GLM 0.94550 (converged in 10 iterations) -\u003e GLM + trees 0.94571 · 134 trees\n"}
+,{"stream_name":"stdout","time":4645.792334218,"data":"  seed 1 fold 0: GLM 0.94950 (converged in 10 iterations) -\u003e GLM + trees 0.95020 · 811 trees\n"}
+,{"stream_name":"stdout","time":4702.606102237,"data":"  seed 1 fold 1: GLM 0.95117 (converged in 10 iterations) -\u003e GLM + trees 0.95144 · 125 trees\n"}
+,{"stream_name":"stdout","time":4774.943197108,"data":"  seed 1 fold 2: GLM 0.95558 (converged in 10 iterations) -\u003e GLM + trees 0.95593 · 357 trees\n"}
+,{"stream_name":"stdout","time":4839.92084588,"data":"  seed 1 fold 3: GLM 0.95099 (converged in 10 iterations) -\u003e GLM + trees 0.95136 · 244 trees\n"}
+,{"stream_name":"stdout","time":4908.397115315,"data":"  seed 1 fold 4: GLM 0.94544 (converged in 10 iterations) -\u003e GLM + trees 0.94569 · 286 trees\n"}
+,{"stream_name":"stdout","time":4979.810601685,"data":"  seed 2 fold 0: GLM 0.94964 (converged in 10 iterations) -\u003e GLM + trees 0.95005 · 334 trees\n"}
+,{"stream_name":"stdout","time":5061.169060142,"data":"  seed 2 fold 1: GLM 0.95116 (converged in 10 iterations) -\u003e GLM + trees 0.95141 · 601 trees\n"}
+,{"stream_name":"stdout","time":5125.078394494,"data":"  seed 2 fold 2: GLM 0.95556 (converged in 10 iterations) -\u003e GLM + trees 0.95574 · 235 trees\n"}
+,{"stream_name":"stdout","time":5212.218857936,"data":"  seed 2 fold 3: GLM 0.95097 (converged in 10 iterations) -\u003e GLM + trees 0.95152 · 576 trees\n"}
+,{"stream_name":"stdout","time":5302.653814865,"data":"  seed 2 fold 4: GLM 0.94568 (converged in 10 iterations) -\u003e GLM + trees 0.94613 · 625 trees\n"}
+,{"stream_name":"stdout","time":5302.856808948,"data":"GLM alone, 3 seeds: CV AUC 0.95055\n"}
+,{"stream_name":"stdout","time":5302.864972076,"data":"Step 6 · + boosting from a GLM (trees start at its logit): CV AUC 0.95106   (+0.00056 vs step 5)\n"}
+,{"stream_name":"stdout","time":5304.309269617,"data":"Rank correlation between members:\n"}
+,{"stream_name":"stdout","time":5310.700996922,"data":"stack weights: {'glmboost_bag': 0.757, 'lgb4_digits_bag': 0.525, 'lgb4_raw': 0.082}\n"}
+,{"stream_name":"stdout","time":5311.207059525,"data":"Step 7 · stack of 3 members: CV AUC 0.95110   (+0.00004 vs step 6)\n"}
+,{"stream_name":"stdout","time":5311.906830766,"data":"saved submission.csv (299,984 rows)\n"}
+,{"stream_name":"stdout","time":5329.005767031,"data":"saved oof_predictions.csv and test_predictions.csv: ['logreg_raw', 'lgb31_raw', 'lgb4_raw', 'lgb4_te', 'lgb4_digits', 'lgb4_digits_bag', 'glm_bag', 'glmboost_bag', 'blend']\n"}
+,{"stream_name":"stdout","time":5372.359842612,"data":"one submission on a public-sized sample: AUC moves ±0.0032 (1 sd); 90% range 0.9458 – 0.9562\n"}
+,{"stream_name":"stdout","time":5374.186787993,"data":"{'goodpjw2008': 'found', 'masayakawamata': 'found', 'megayak': 'found', 'lazyyeou': 'found', 'malyshevdanil': 'found', 'wguesdon': 'found'}\n"}
+,{"stream_name":"stdout","time":5378.391716494,"data":"masayakawamata folds match ours: True\n"}
+,{"stream_name":"stdout","time":5420.805725754,"data":"wguesdon folds match ours: True\n"}
+,{"stream_name":"stdout","time":5423.688854843,"data":"98 candidate models\n"}
+,{"stream_name":"stdout","time":5488.668268637,"data":"78 distinct models kept: {'malyshevdanil': 25, 'lazyyeou': 17, 'goodpjw2008': 16, 'megayak': 7, 'this notebook': 6, 'wguesdon': 6, 'masayakawamata': 1}\n"}
+,{"stream_name":"stdout","time":5784.51604506,"data":"Step 8 · pooled stack of 78 models (public + ours): CV AUC 0.95214   (+0.00104 vs step 7)\n"}
+,{"stream_name":"stdout","time":5785.210295346,"data":"saved submission_pooled.csv (299,984 rows)\n"}
+,{"stream_name":"stdout","time":5785.210425535,"data":"largest weights: {'masaya:gpt2': 1.149, 'ours:glmboost_bag': 0.493, 'lazy:xgb_l4__s3': 0.451, 'malyshev:own_ebm_private_int5': 0.404, 'good:gb_s4': 0.396}\n"}
+,{"stream_name":"stdout","time":5785.553442683,"data":"total runtime: 96.1 min\n"}
+,{"stream_name":"stderr","time":5789.713620366,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":5789.713671897,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":5789.939540939,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":5789.939572826,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":5790.933734166,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":5791.118234329,"data":"[NbConvertApp] Writing 816138 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":5794.71344306,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":5795.793446268,"data":"[NbConvertApp] Support files will be in __results___files/\n"}
+,{"stream_name":"stderr","time":5795.793494141,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":5795.793845245,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":5795.793971518,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":5795.794242734,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":5795.794408883,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":5795.794571269,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":5795.794740492,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":5795.794933691,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":5795.79517663,"data":"[NbConvertApp] Writing 637942 bytes to __results__.html\n"}
+]

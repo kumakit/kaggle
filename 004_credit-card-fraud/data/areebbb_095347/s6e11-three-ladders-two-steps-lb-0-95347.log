@@ -1,0 +1,37 @@
+[{"stream_name":"stderr","time":6.675751601,"data":"/usr/local/lib/python3.13/dist-packages/nbformat/validator.py:434: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, and will stop doing so in the future.\n"}
+,{"stream_name":"stderr","time":6.675801206,"data":"  _validate(nbdict, ref, version, version_minor, relax_add_props)\n"}
+,{"stream_name":"stderr","time":7.685019869,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.6850525,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.685059014,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.685077494,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.394415576,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.394471932,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.394479113,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.394483553,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":14.836611359,"data":"correlation with Strike 10: 0.999075\n"}
+,{"stream_name":"stdout","time":15.537978475,"data":"wrote /kaggle/working/submission.csv 299984 rows, sha ae59376b63430546\n"}
+,{"stream_name":"stdout","time":15.672551629,"data":"(299984, 2)\n"}
+,{"stream_name":"stdout","time":15.672587532,"data":"       id  is_fraud\n"}
+,{"stream_name":"stdout","time":15.672593146,"data":"0  699960  0.341677\n"}
+,{"stream_name":"stdout","time":15.67259749,"data":"1  699961  0.103217\n"}
+,{"stream_name":"stdout","time":15.672601354,"data":"2  699962  0.979821\n"}
+,{"stream_name":"stdout","time":15.672605494,"data":"3  699963  0.786507\n"}
+,{"stream_name":"stdout","time":15.672609293,"data":"4  699964  0.686575\n"}
+,{"stream_name":"stdout","time":15.672613604,"data":"count    299984.000000\n"}
+,{"stream_name":"stdout","time":15.672617489,"data":"mean          0.500000\n"}
+,{"stream_name":"stdout","time":15.672621178,"data":"std           0.288676\n"}
+,{"stream_name":"stdout","time":15.672625422,"data":"min           0.000002\n"}
+,{"stream_name":"stdout","time":15.672629132,"data":"25%           0.250001\n"}
+,{"stream_name":"stdout","time":15.672632988,"data":"50%           0.500000\n"}
+,{"stream_name":"stdout","time":15.672636709,"data":"75%           0.749999\n"}
+,{"stream_name":"stdout","time":15.672643958,"data":"max           0.999998\n"}
+,{"stream_name":"stdout","time":15.672648181,"data":"Name: is_fraud, dtype: float64\n"}
+,{"stream_name":"stderr","time":18.96689067,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":18.966922154,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":19.153483574,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":19.153510097,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":20.045956167,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":20.134786132,"data":"[NbConvertApp] Writing 16099 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":23.286708162,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":23.907688918,"data":"[NbConvertApp] Writing 300439 bytes to __results__.html\n"}
+]

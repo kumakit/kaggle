@@ -17,6 +17,7 @@ catboost_info/
 *.zip
 *.gz
 *.parquet
+*.npy
 
 # Excluded folders per guidelines
 Archives/
