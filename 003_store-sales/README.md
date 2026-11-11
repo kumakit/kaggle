@@ -185,9 +185,15 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 32: Colab L4 GPU 震災減衰 ＆ 祝日精緻化 5シード 1,000木 GBDT**（完了！手元 Val: **`0.39835`**）
   - [src/exp032_colab_l4_earthquake_holidays.py](src/exp032_colab_l4_earthquake_holidays.py)：2016年M7.8地震指数減衰＋全国・州・都市祝日（8/24 Ambato等）＋祝日前日（56特徴量）L4 GPU学習スクリプト
   - [learning-log.md](learning-log.md)：実験 #032 記録完了（相関0.99941と優れた非冗長性を獲得）
-- [ ] **Step 33: 7大モデル 33ファミリー別 SLSQP 数理最適化ブレンド**（推論完了！朝9:00提出枠復活待ち）
+- [x] **Step 33: 7大モデル 33ファミリー別 SLSQP 数理最適化ブレンド**（完了！スコア: **`0.38860`**）
   - [src/exp033_7models_blend.py](src/exp033_7models_blend.py)：Exp #032 を統合した 7大トップモデル全33商品カテゴリ個別 SLSQP 最適化スクリプト
   - [learning-log.md](learning-log.md)：実験 #033 記録完了（主要カテゴリでExp032が上限25%フル配分）
+- [x] **Step 34: 超・黄金アンサンブル**（完了！スコア: **`0.38815`**、二重アンサンブルで-0.00045改善！）
+  - [src/exp034_super_dual_blend.py](src/exp034_super_dual_blend.py)：Exp #030 (PB 0.38793) 50% + Exp #033 50% 対数幾何平均スクリプト
+  - [learning-log.md](learning-log.md)：実験 #034 記録完了
+- [x] **Step 35: 誤爆ゼロクリップ救済 ＆ Sierra新学期復元**（完了！スコア: **`0.38810`**、重大ドメイン知見実証！）
+  - [src/exp035_precision_zero_rescue.py](src/exp035_precision_zero_rescue.py)：夏休み中に誤爆ゼロ化されていたSierra新学期店舗(Store 1, 2, 6, 23, 37)を前年実績推移で救済するスクリプト
+  - [learning-log.md](learning-log.md)：実験 #035 記録完了（自己ベスト0.38793に肉薄、本日残り2回）
 
 ---
 
