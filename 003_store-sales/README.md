@@ -196,7 +196,10 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
   - [learning-log.md](learning-log.md)：実験 #035 記録完了（自己ベスト0.38793に肉薄）
 - [x] **Step 36: 黄金重心 ＆ 新学期Sierraスパイス調合**（完了！スコア: **`0.38788`**、**自己ベスト更新！過去最高スコア達成！🏆**）
   - [src/exp036_golden_spice_blend.py](src/exp036_golden_spice_blend.py)：Exp #030 (PB 85%) + 完全復元Sierra新学期 (15%) 調合スクリプト
-  - [learning-log.md](learning-log.md)：実験 #036 記録完了（ついに0.3878台突入、メダル圏まで残り0.00186、本日残り1回）
+  - [learning-log.md](learning-log.md)：実験 #036 記録完了（ついに0.3878台突入、メダル圏まで残り0.00186）
+- [x] **Step 37: スパイス比率最適探索 25%**（完了！スコア: **`0.38792`**、0.3878〜0.3879台の平坦盆地を完全実証！🏆）
+  - [src/exp037_optimal_spice_25.py](src/exp037_optimal_spice_25.py)：Exp #030 (PB 75%) + 完全復元Sierra新学期 (25%) 調合スクリプト
+  - [learning-log.md](learning-log.md)：実験 #037 記録完了（本日5/5枠完全消化）
 
 ---
 
