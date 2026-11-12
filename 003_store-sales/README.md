@@ -200,9 +200,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 37: スパイス比率最適探索 25%**（完了！スコア: **`0.38792`**、0.3878〜0.3879台の平坦盆地を完全実証！🏆）
   - [src/exp037_optimal_spice_25.py](src/exp037_optimal_spice_25.py)：Exp #030 (PB 75%) + 完全復元Sierra新学期 (25%) 調合スクリプト
   - [learning-log.md](learning-log.md)：実験 #037 記録完了（本日5/5枠完全消化）
-- [x] **Step 38: Colab L4 GPU 地域完全分離新学期 ＆ ゼロ恒久保護 5シード 1,000木 GBDT**（完了！手元 Val: **`0.39116`**、**単体過去最高特大更新！🏆**）
+- [x] **Step 38: Colab L4 GPU 地域完全分離新学期 ＆ ゼロ恒久保護 5シード 1,000木 GBDT**（完了！手元 Val: **`0.39116`**、本番 LB: **`0.40018`**）
   - [src/exp038_colab_l4_regional_school.py](src/exp038_colab_l4_regional_school.py)：Costa(4-5月) vs Sierra(8-9月)新学期カレンダーを完全直交分離＋学用品ゼロ誤爆恒久保護（60特徴量）L4 GPU 5シード学習スクリプト
-  - [learning-log.md](learning-log.md)：実験 #038 記録完了（手元Val過去最高 0.397台から一気に0.39116へ急伸）
+  - [learning-log.md](learning-log.md)：実験 #038 記録完了（単体ベンチマーク確定、多層アンサンブルPB 0.38788とのバリアンス格差を完全解明）
 - [x] **Step 39: 地域完全分離 黄金ブレンド**（完了！提出準備完了）
   - [src/exp039_regional_golden_blend.py](src/exp039_regional_golden_blend.py)：Exp #036 (PB 75%) + Exp #038 (地域完全分離 25%) 幾何平均スクリプト
   - [learning-log.md](learning-log.md)：実験 #039 記録完了（相関0.99995、Sierra新学期を適正復元）
