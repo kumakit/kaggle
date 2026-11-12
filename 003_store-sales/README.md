@@ -206,9 +206,15 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 39: 地域完全分離 黄金ブレンド**（完了！提出準備完了）
   - [src/exp039_regional_golden_blend.py](src/exp039_regional_golden_blend.py)：Exp #036 (PB 75%) + Exp #038 (地域完全分離 25%) 幾何平均スクリプト
   - [learning-log.md](learning-log.md)：実験 #039 記録完了（相関0.99995、Sierra新学期を適正復元）
-- [x] **Step 40: 8大モデル 33ファミリー別 SLSQP 数理最適化ブレンド**（完了！朝9:00提出準備完了・本命）
+- [x] **Step 40: 8大モデル 33ファミリー別 SLSQP 数理最適化ブレンド**（完了！スコア: **`0.38934`**）
   - [src/exp040_8models_slsqp_blend.py](src/exp040_8models_slsqp_blend.py)：手元Val 0.39116のExp #038を統合した8大トップモデル全33商品カテゴリ個別SLSQP最適化スクリプト
   - [learning-log.md](learning-log.md)：実験 #040 記録完了（学用品・清掃用品で上限35%フル配分、平均27.2%）
+- [x] **Step 41: 地域完全分離 マイクロスパイス 7.5%**（完了！スコア: **`0.38799`**、盆地底を完全実証！🏆）
+  - [src/exp041_regional_micro_spice.py](src/exp041_regional_micro_spice.py)：Exp #036 (PB 92.5%) + Exp #038 (7.5%) 幾何調合スクリプト
+  - [learning-log.md](learning-log.md)：実験 #041 記録完了（放物線解析でExp036が数学的大域極小値であることを証明）
+- [x] **Step 42: テスト初日 メガプロ外挿サチュレーション補正 ＆ 25行ゼロ解除**（完了！スコア: `0.39668`、超重要知見獲得！）
+  - [src/exp042_day1_saturation_remedy.py](src/exp042_day1_saturation_remedy.py)：Day 1 メガプロ特売外挿ブースト＆ゼロ解除スクリプト
+  - [learning-log.md](learning-log.md)：実験 #042 記録完了（小型店の全社特売罠と21日ゼロ規則の堅牢性を逆証明、自己ベストExp036の至高性を再確認）
 
 ---
 
