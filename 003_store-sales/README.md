@@ -218,6 +218,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 43: Colab L4 GPU PyTorch Direct Multi-Horizon Deep ResNet 5シード**（完了！手元 5S Val: **`0.41263`**、相関 `0.99809` の異質モデル獲得！）
   - [src/exp043_colab_l4_multihorizon_dnn.py](src/exp043_colab_l4_multihorizon_dnn.py)：Entity Embedding (60d) ＋ 103連続特徴量 ＋ 2層残差ブロックによる 16日一括ダイレクト予測 ResNet（5シード平均）
   - [learning-log.md](learning-log.md)：実験 #043 記録完了（GBDT との完全非冗長性を獲得、ハイブリッド調合準備完了）
+- [x] **Step 44: 異種ハイブリッドブレンド (Exp036 GBDT PB 95% + Exp043 PyTorch DNN 5% ＋ ゼロ保持)**（完了！自己ベスト大幅更新 **`0.38632`** 🏆、68位 / 623チーム！）
+  - [src/exp044_hybrid_gbdt_dnn_spice.py](src/exp044_hybrid_gbdt_dnn_spice.py)：対数空間 95:5 ブレンド ＋ Exp036 ゼロ2,001行完全保持フィルタ
+  - [learning-log.md](learning-log.md)：実験 #044 記録完了（`-0.00156` の劇的改善を実証、銅メダルTop 10%まであと `0.00154`）
 
 ---
 
