@@ -124,9 +124,9 @@ def build_datasets(data_dir):
         ])
     static_cats = np.array(static_cats, dtype=np.int64) # shape (1782, 6)
 
-    # Sliding windows: weekly cutoffs from 2015-06-01 to 2017-07-15
-    train_cutoffs = pd.date_range("2015-06-01", "2017-07-15", freq="7D")
-    val_cutoff = pd.Timestamp("2017-07-31") # Validation: 2017-08-01 to 2017-08-15 (15 days, pad to 16)
+    # Sliding windows: every 3 days from 2015-08-01 to 2017-07-15 (captures all days-of-week and paydays)
+    train_cutoffs = pd.date_range("2015-08-01", "2017-07-15", freq="3D")
+    val_cutoff = pd.Timestamp("2017-07-31") # Validation: 2017-08-01 to 2017-08-15 (15 days)
     test_cutoff = pd.Timestamp("2017-08-15") # Test: 2017-08-16 to 2017-08-31 (16 days)
 
     def extract_features_for_cutoff(T, is_test=False):
@@ -136,22 +136,43 @@ def build_datasets(data_dir):
 
         x_lags = np.log1p(piv_sales.loc[t_past].values.T) # (1782, 30)
         x_promo = np.log1p(piv_promo.loc[t_target].values.T) # (1782, 16)
+        x_promo_past = np.log1p(piv_promo.loc[t_past].values.T) # (1782, 30)
         x_yoy = np.log1p(piv_sales.loc[t_yoy].values.T) # (1782, 16)
+
+        # Summary statistics of recent 30 days & 7 days
+        lag_mean30 = np.mean(x_lags, axis=1, keepdims=True) # (1782, 1)
+        lag_std30 = np.std(x_lags, axis=1, keepdims=True) # (1782, 1)
+        lag_mean7 = np.mean(x_lags[:, -7:], axis=1, keepdims=True) # (1782, 1)
+        promo_mean_past = np.mean(x_promo_past, axis=1, keepdims=True) # (1782, 1)
+        promo_diff = x_promo - promo_mean_past # (1782, 16)
+
+        # Payday vector across the 16 target days (15th or month-end)
+        paydays = np.array([
+            1.0 if (d.day == 15 or d.is_month_end) else 0.0
+            for d in t_target
+        ], dtype=np.float32) # (16,)
+        payday_feats = np.tile(paydays, (n_series, 1)) # (1782, 16)
 
         # Calendar features (start of horizon)
         start_date = t_target[0]
-        month = start_date.month / 12.0
-        day = start_date.day / 31.0
-        dow = start_date.day_of_week / 6.0
+        month_sin = np.sin(2 * np.pi * start_date.month / 12.0)
+        month_cos = np.cos(2 * np.pi * start_date.month / 12.0)
+        dow_sin = np.sin(2 * np.pi * start_date.day_of_week / 7.0)
+        dow_cos = np.cos(2 * np.pi * start_date.day_of_week / 7.0)
         
         # Earthquake decay
         eq_days = max(0, (start_date - pd.Timestamp("2016-04-16")).days)
-        eq_decay = np.exp(-eq_days / 30.0)
+        eq_decay = np.exp(-eq_days / 30.0) if start_date >= pd.Timestamp("2016-04-16") else 0.0
 
-        cal_feat = np.array([month, day, dow, eq_decay], dtype=np.float32)
-        cal_feats = np.tile(cal_feat, (n_series, 1)) # (1782, 4)
+        cal_feat = np.array([month_sin, month_cos, dow_sin, dow_cos, eq_decay], dtype=np.float32)
+        cal_feats = np.tile(cal_feat, (n_series, 1)) # (1782, 5)
 
-        x_cont = np.hstack([x_lags, x_promo, x_yoy, cal_feats]).astype(np.float32) # (1782, 66)
+        # Total continuous dims: 30 + 16 + 16 + 16 + 4 + 16 + 5 = 103
+        x_cont = np.hstack([
+            x_lags, x_promo, promo_diff, x_yoy,
+            lag_mean30, lag_std30, lag_mean7, promo_mean_past,
+            payday_feats, cal_feats
+        ]).astype(np.float32)
 
         if not is_test:
             y = np.log1p(piv_sales.loc[t_target].values.T).astype(np.float32) # (1782, 16)
@@ -209,7 +230,7 @@ def train_and_predict(train_data, val_data, test_data, test_df, series_cols):
     ds_va = TensorDataset(torch.tensor(X_cont_va), torch.tensor(X_cat_va), torch.tensor(y_va))
     ds_te = TensorDataset(torch.tensor(X_cont_te), torch.tensor(X_cat_te))
 
-    batch_size = 1024
+    batch_size = 2048
     loader_tr = DataLoader(ds_tr, batch_size=batch_size, shuffle=True, drop_last=True)
     loader_va = DataLoader(ds_va, batch_size=batch_size, shuffle=False)
     loader_te = DataLoader(ds_te, batch_size=batch_size, shuffle=False)
@@ -282,8 +303,9 @@ def train_and_predict(train_data, val_data, test_data, test_df, series_cols):
             out = self.head(h)
             return out
 
-    seeds = [42, 2026, 777]
+    seeds = [42, 2026, 777, 1234, 9999]
     seed_preds_te = []
+    seed_preds_va = []
     seed_val_scores = []
 
     for seed in seeds:
@@ -292,13 +314,13 @@ def train_and_predict(train_data, val_data, test_data, test_df, series_cols):
         np.random.seed(seed)
 
         model = MultiHorizonResNet(cont_dim=X_cont_tr.shape[1]).to(device)
-        optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=50, eta_min=1e-5)
+        optimizer = torch.optim.AdamW(model.parameters(), lr=1.5e-3, weight_decay=1e-4)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=60, eta_min=1e-5)
         criterion = nn.MSELoss()
 
         best_val_loss = float("inf")
         best_state = None
-        patience = 12
+        patience = 15
         patience_cnt = 0
 
         for epoch in range(1, 61):
@@ -322,7 +344,7 @@ def train_and_predict(train_data, val_data, test_data, test_df, series_cols):
             with torch.no_grad():
                 for xc, xcat, y in loader_va:
                     xc, xcat, y = xc.to(device), xcat.to(device), y.to(device)
-                    pred = model(xc, xcat)
+                    pred = torch.clamp(model(xc, xcat), min=0.0)
                     # evaluate on first 15 days (day 1-15 match validation holdout)
                     loss = criterion(pred[:, :15], y[:, :15])
                     total_va_loss += loss.item() * len(y)
@@ -345,21 +367,32 @@ def train_and_predict(train_data, val_data, test_data, test_df, series_cols):
         seed_val_scores.append(np.sqrt(best_val_loss))
         print(f"  Seed {seed} Best Val RMSLE: {seed_val_scores[-1]:.5f}")
 
-        # Predict Test
+        # Predict Val & Test
         model.load_state_dict(best_state)
         model.to(device)
         model.eval()
+
+        va_preds = []
+        with torch.no_grad():
+            for xc, xcat, _ in loader_va:
+                xc, xcat = xc.to(device), xcat.to(device)
+                va_preds.append(torch.clamp(model(xc, xcat), min=0.0).cpu().numpy())
+        seed_preds_va.append(np.vstack(va_preds))
 
         test_preds = []
         with torch.no_grad():
             for xc, xcat in loader_te:
                 xc, xcat = xc.to(device), xcat.to(device)
-                pred = model(xc, xcat) # (1782, 16)
+                pred = torch.clamp(model(xc, xcat), min=0.0) # (1782, 16)
                 test_preds.append(pred.cpu().numpy())
         test_preds = np.vstack(test_preds) # (1782, 16)
         seed_preds_te.append(test_preds)
 
-    print(f"\n[EVAL] 3-Seed Mean Val RMSLE: {np.mean(seed_val_scores):.5f}")
+    # Calculate 5-Seed Ensemble Val RMSLE
+    ens_va = np.mean(seed_preds_va, axis=0)[:, :15]
+    ens_val_rmsle = np.sqrt(np.mean((ens_va - y_va[:, :15]) ** 2))
+    print(f"\n[EVAL] 5-Seed Mean Individual Val RMSLE: {np.mean(seed_val_scores):.5f}")
+    print(f"[EVAL] 5-Seed ENSEMBLE Val RMSLE:        {ens_val_rmsle:.5f}")
 
     # Average 3 seeds in log-space
     avg_log_preds = np.mean(seed_preds_te, axis=0) # (1782, 16)
