@@ -215,6 +215,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 42: テスト初日 メガプロ外挿サチュレーション補正 ＆ 25行ゼロ解除**（完了！スコア: `0.39668`、超重要知見獲得！）
   - [src/exp042_day1_saturation_remedy.py](src/exp042_day1_saturation_remedy.py)：Day 1 メガプロ特売外挿ブースト＆ゼロ解除スクリプト
   - [learning-log.md](learning-log.md)：実験 #042 記録完了（小型店の全社特売罠と21日ゼロ規則の堅牢性を逆証明、自己ベストExp036の至高性を再確認）
+- [x] **Step 43: Colab L4 GPU PyTorch Direct Multi-Horizon Deep ResNet 5シード**（完了！手元 5S Val: **`0.41263`**、相関 `0.99809` の異質モデル獲得！）
+  - [src/exp043_colab_l4_multihorizon_dnn.py](src/exp043_colab_l4_multihorizon_dnn.py)：Entity Embedding (60d) ＋ 103連続特徴量 ＋ 2層残差ブロックによる 16日一括ダイレクト予測 ResNet（5シード平均）
+  - [learning-log.md](learning-log.md)：実験 #043 記録完了（GBDT との完全非冗長性を獲得、ハイブリッド調合準備完了）
 
 ---
 
