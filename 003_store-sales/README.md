@@ -227,6 +227,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 46: 異種ハイブリッドブレンド 15% (Exp036 GBDT 85% + Exp043 PyTorch DNN 15% ＋ ゼロ保持)**（完了！**Top 10% 銅メダル圏突破 `0.38366`** 🥉、**54位 / 624チーム**！）
   - [src/exp046_hybrid_gbdt_dnn_spice15.py](src/exp046_hybrid_gbdt_dnn_spice15.py)：対数空間 85:15 ブレンド ＋ Exp036 ゼロ2,001行完全保持フィルタ
   - [learning-log.md](learning-log.md)：実験 #046 記録完了（0.383台突入、Top 10%ボーダー `0.38478` を8チーム・`-0.00112` 上抜け）
+- [x] **Step 47: 異種ハイブリッドブレンド 25% (Exp036 GBDT 75% + Exp043 PyTorch DNN 25% ＋ ゼロ保持)**（完了！自己ベスト大幅更新 **`0.38163`** 🏆、**42位 / 625チーム**！）
+  - [src/exp047_hybrid_gbdt_dnn_sweep.py](src/exp047_hybrid_gbdt_dnn_sweep.py)：汎用対数空間ブレンドスイープ（75:25 ＋ Exp036 ゼロ2,001行保持）
+  - [learning-log.md](learning-log.md)：実験 #047 記録完了（Exp036比 `-0.00625` 改善、Top 10%ボーダーを20チーム・`-0.00315` 上抜け）
 
 ---
 
