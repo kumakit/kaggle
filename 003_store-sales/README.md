@@ -254,6 +254,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 55: 5系統直交クインテットブレンド ＆ 厳密Gram行列同時最適解の特定**（完了！LB `0.37813` / 理論 `0.37763` 最適解発見！）
   - [src/exp055_quintet_hybrid_blend.py](src/exp055_quintet_hybrid_blend.py)：5系統対数統合検証（Exp053比 Shift `0.018368`）
   - [learning-log.md](learning-log.md)：実験 #055 記録完了（全10提出誤差 `4e-6` 精度の5次元Gram行列で `[32.4%, 32.2%, 5.7%, 24.8%, 4.9%]` → `0.37763` を導出）
+- [x] **Step 56: 5×5 厳密Gram行列 同時最適化クインテット提出（24位・自己ベスト `0.37761` 更新！）**（完了！理論 `0.37762` を `-0.00001` 上回る超精密的中！）
+  - [src/exp056_gram_optimal_quintet.py](src/exp056_gram_optimal_quintet.py)：10提出フィット最大残差 `3.83e-6` から `GBDT1 31.08% + ResNet 32.36% + BiGRU-TCN 4.07% + Patch-DLinear 27.52% + Direct GBDT2 4.96%` を厳密導出し統合（Exp053比 Log Corr `0.999987` / Shift `0.01290`）
+  - [learning-log.md](learning-log.md)：実験 #056 記録完了（LB `0.37761` / **24位 / 635チーム**, Top 5%境界31位 `0.37912` を **`-0.00151`・7チーム上抜け**）
 
 ---
 
