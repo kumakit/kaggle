@@ -248,6 +248,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 53: 4系統直交ハイブリッドブレンド (GBDT 27% + ResNet 29.25% + BiGRU 18.75% + Patch-Trans 25% ＋ ゼロ保持)**（完了！**8連続PB更新 `0.37784`** 🥈、**25位 / 632チーム（上位3.96%）**！）
   - [src/exp053_quad_gbdt_resnet_bigru_patch.py](src/exp053_quad_gbdt_resnet_bigru_patch.py)：4大アーキテクチャ対数空間統合 ＋ Exp036 ゼロ2,001行保持
   - [learning-log.md](learning-log.md)：実験 #053 記録完了（`0.377` 台突入・Exp036比 `-0.01004` 更新・Top 5%を6チーム上抜け）
+- [x] **Step 54: Colab L4 GPU 第2世代 Direct Multi-Horizon GBDT (LightGBM + XGBoost CUDA + CatBoost GPU 3シード)**（完了！Val Raw **`0.39284`**, 単体推定LB **`0.38808`**！）
+  - [src/exp054_colab_l4_gbdt_gen2.py](src/exp054_colab_l4_gbdt_gen2.py)：再帰廃止・72特徴量 Direct 16ホライズン GBDT（Exp038 `0.40018` から単体本番 `-0.01210` 改善）
+  - [learning-log.md](learning-log.md)：実験 #054 記録完了（SLSQPエンジン比 XGB `43.35%` + CatBoost GPU `56.65%`）
+- [x] **Step 55: 5系統直交クインテットブレンド ＆ 厳密Gram行列同時最適解の特定**（完了！LB `0.37813` / 理論 `0.37763` 最適解発見！）
+  - [src/exp055_quintet_hybrid_blend.py](src/exp055_quintet_hybrid_blend.py)：5系統対数統合検証（Exp053比 Shift `0.018368`）
+  - [learning-log.md](learning-log.md)：実験 #055 記録完了（全10提出誤差 `4e-6` 精度の5次元Gram行列で `[32.4%, 32.2%, 5.7%, 24.8%, 4.9%]` → `0.37763` を導出）
 
 ---
 
