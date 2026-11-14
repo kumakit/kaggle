@@ -242,6 +242,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 51: 3系統直交ハイブリッドブレンド (GBDT 36% + ResNet 39% + TCN-BiGRU 25% ＋ ゼロ保持)**（完了！**Top 5% 銀メダル圏突破 `0.37839`** 🥈、**26位 / 633チーム**！）
   - [src/exp051_triad_gbdt_resnet_bigru.py](src/exp051_triad_gbdt_resnet_bigru.py)：3異質モデル対数空間統合 ＋ Exp036 ゼロ2,001行保持
   - [learning-log.md](learning-log.md)：実験 #051 記録完了（`0.378` 台突入・Top 5%ボーダー `0.37912` を5チーム上抜け・上位4.1%圏）
+- [x] **Step 52: Colab L4 GPU RevIN + DLinear + Patch-Transformer 5シード**（完了！**全単体モデル過去最高 Val `0.38636`**、第4の直交モデル獲得！）
+  - [src/exp052_colab_l4_patch_dlinear.py](src/exp052_colab_l4_patch_dlinear.py)：90日履歴 ＋ 2年YoY(-728日) ＋ 15日トレンド分解DLinear ＋ 3層Patch-Transformer
+  - [learning-log.md](learning-log.md)：実験 #052 記録完了（推定単体LB `0.38483`、全モデルとの非冗長性獲得）
+- [x] **Step 53: 4系統直交ハイブリッドブレンド (GBDT 27% + ResNet 29.25% + BiGRU 18.75% + Patch-Trans 25% ＋ ゼロ保持)**（完了！**8連続PB更新 `0.37784`** 🥈、**25位 / 632チーム（上位3.96%）**！）
+  - [src/exp053_quad_gbdt_resnet_bigru_patch.py](src/exp053_quad_gbdt_resnet_bigru_patch.py)：4大アーキテクチャ対数空間統合 ＋ Exp036 ゼロ2,001行保持
+  - [learning-log.md](learning-log.md)：実験 #053 記録完了（`0.377` 台突入・Exp036比 `-0.01004` 更新・Top 5%を6チーム上抜け）
 
 ---
 
