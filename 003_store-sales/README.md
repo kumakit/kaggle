@@ -236,6 +236,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 49: 異種ハイブリッドブレンド 52% 理論極小点 (Exp036 GBDT 48% + Exp043 PyTorch DNN 52% ＋ ゼロ保持)**（完了！6連続PB更新 **`0.37932`** 🏆、**32位 / 633チーム・Top 5%まで1チーム差!!**）
   - [src/exp047_hybrid_gbdt_dnn_sweep.py](src/exp047_hybrid_gbdt_dnn_sweep.py)：汎用対数空間ブレンドスイープ（`--alpha 0.52 --exp 49` ＋ Exp036 ゼロ2,001行保持）
   - [learning-log.md](learning-log.md)：実験 #049 記録完了（`0.379` 台突入、Top 5%銀メダル圏31位 `0.37915` まであと `0.00017`）
+- [x] **Step 50: Colab L4 GPU Seq2Horizon Dilated-TCN + 2層BiGRU + CrossAttn 5シード**（完了！単体 5S Val: **`0.38926`**、第3の完全直交モデル獲得！）
+  - [src/exp050_colab_l4_bigru_tcn.py](src/exp050_colab_l4_bigru_tcn.py)：過去60日履歴 ＋ `transactions`/`oil`/`holidays` 統合、GPU常駐1日スライド学習
+  - [learning-log.md](learning-log.md)：実験 #050 記録完了（Exp043比 `-0.02337` 改善、GBDT/ResNet両方と相関 `0.9983`）
+- [x] **Step 51: 3系統直交ハイブリッドブレンド (GBDT 36% + ResNet 39% + TCN-BiGRU 25% ＋ ゼロ保持)**（完了！**Top 5% 銀メダル圏突破 `0.37839`** 🥈、**26位 / 633チーム**！）
+  - [src/exp051_triad_gbdt_resnet_bigru.py](src/exp051_triad_gbdt_resnet_bigru.py)：3異質モデル対数空間統合 ＋ Exp036 ゼロ2,001行保持
+  - [learning-log.md](learning-log.md)：実験 #051 記録完了（`0.378` 台突入・Top 5%ボーダー `0.37912` を5チーム上抜け・上位4.1%圏）
 
 ---
 
