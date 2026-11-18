@@ -1,0 +1,23 @@
+{
+  "id": "nobuyukikumagai/name-that-llm-exp010-glm-train-feats",
+  "title": "name that llm exp010 glm train feats",
+  "code_file": "exp010_extract_train_glm.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": [
+    "jamesliebel/glm53-flash-iq3xxs-segs-mirror",
+    "jamesliebel/glm53-iq3xxs-segs-a-mirror",
+    "jamesliebel/glm53-iq3xxs-segs-b-mirror"
+  ],
+  "competition_sources": [
+    "name-that-llm"
+  ],
+  "kernel_sources": [
+    "estopadilla/ntl-glm-likelihood-train"
+  ],
+  "model_sources": []
+}

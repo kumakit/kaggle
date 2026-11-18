@@ -13,11 +13,16 @@ catboost_info/
 .ipynb_checkpoints/
 
 # Data files (keep repository lightweight)
+*/data/
 *.csv
 *.zip
 *.gz
 *.parquet
 *.npy
+*.npz
+*.cbm
+*.joblib
+*.log
 
 # Excluded folders per guidelines
 Archives/

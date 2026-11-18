@@ -1,0 +1,36 @@
+{
+  "id": "nobuyukikumagai/name-that-llm-exp014-full-ensemble",
+  "title": "name that llm exp014 full ensemble",
+  "code_file": "submission_exp014.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": [
+    "nobuyukikumagai/name-that-llm-exp013-qwen3-8b-lora",
+    "nobuyukikumagai/name-that-llm-exp013-stylegram-v2",
+    "nobuyukikumagai/name-that-llm-exp011-stylegram",
+    "nobuyukikumagai/name-that-llm-exp012-deberta-large",
+    "nobuyukikumagai/name-that-llm-exp010-glm-models",
+    "nobuyukikumagai/name-that-llm-exp008-modernbert-large",
+    "nobuyukikumagai/name-that-llm-exp007-qwen3-4b-lora",
+    "nobuyukikumagai/name-that-llm-exp006-qwen3-lora",
+    "nobuyukikumagai/name-that-llm-exp005-weights",
+    "jamesliebel/glm53-flash-iq3xxs-segs-mirror",
+    "jamesliebel/glm53-iq3xxs-segs-a-mirror",
+    "jamesliebel/glm53-iq3xxs-segs-b-mirror"
+  ],
+  "competition_sources": [
+    "name-that-llm"
+  ],
+  "kernel_sources": [
+    "estopadilla/ntl-glm-likelihood-train"
+  ],
+  "model_sources": [
+    "qwen-lm/qwen-3/Transformers/8b-base/1",
+    "qwen-lm/qwen-3/Transformers/4b-base/1",
+    "qwen-lm/qwen-3/Transformers/1.7b-base/1"
+  ]
+}
