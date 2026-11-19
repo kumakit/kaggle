@@ -11,6 +11,8 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#015** | **7バックボーン (`+10% Llama-3.1-8B 24L 8層読み出し`) ＋ `SGv1(0.35)`＋`SGv2(0.35)` ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(0.85)` ＋ `GLM-5.3/Flash`** | **`0.73165`** (Val-Split **`0.73202`** / Neural `0.64350→0.65128` / `Llama3-8B`単体 `0.57164`) | *(Commit 実行中)* | - | 異ファミリー `Llama-3.1-8B` (vs 4B相関 `0.7870`, vs MB-L `0.7649`) 追加で OOF **`+0.00259`**（Nested-CV 全 5 Fold 一致で `w_ll>0` 選出、`claude-fable-5 +0.020`, `gpt-6-astra +0.027`） |
+| - | (参考) Exp #015 単体: Stage 1 In-Style優先 36k + 5-Fold Stage 2 `Meta-Llama-3.1-8B (24L)` QLoRA | `0.57164` (`[0.57222, 0.58519, 0.59259, 0.55096, 0.55741]`) | - | - | Stage 1 Zero-Shot `0.51087` (`Pool-Val 0.52654`)。`nobuyukikumagai/name-that-llm-exp015-llama3-8b-lora` 保存完了 |
 | **#014** | **6バックボーン（Exp #013同一）＋ `SGv1(0.35)`＋`SGv2(0.35)`併用 ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(alpha=0.85)` ＋ `GLM-5.3/Flash`** | **`0.72906`** (Nested-CV **`0.72794`**, 3/5 Fold一致選出) | **`0.660`** (`Ref 58526363`) | **`2,517 位`** / 6,422 チーム | **Exp #013 と同点 `0.660` プラトー確認**（Nested-CV は `+0.00111` 改善）。後処理・TF-IDF 配合の上限に達し、次手は大型・異ファミリーモデル＆`GAUSS_HEAD` へ移行 |
 | **#013** | **6バックボーン (`25% Qwen3-8B_v2[6..36] + 22.5% 4B + 22.5% MB-L + 15% Deb-L + 11.25% 1.7B + 3.75% MB-B`) ＋ `StyleGram v2(0.65)` ＋ `Family Gates(lam=0.25)` ＋ 緩和 Sinkhorn (`0.65/0.35`) ＋ `Exp #010 GLM-5.3/Flash`** | **`0.72979`** (Nested-CV **`0.72683`**, Qwen3-8B単体 `0.59570` / SGv2単体 **`0.49377`**) | **`0.660`** (`Ref 58503553`) | **`2,437 位`** / 6,323 チーム | **+0.006 自己ベスト更新（Exp #013a 比 +0.008、`+53`順位上昇）！** Top 38.5%。`Qwen3-8B v2` を `T4x2 device_map="auto"` で `198.8s` 推論、Kernel `42.6m` 完走 |
 | **#013a** | (先行検証) 5バックボーン（Exp #012構成）＋ `StyleGram v2(0.50)` ＋ `Family Gates(lam=0.35)` ＋ 緩和 Sinkhorn (`0.65/0.35`) ＋ `Exp #010 GLM-5.3/Flash` | **`0.72350`** (`StyleGram v2` 単体 **`0.49377`**) | **`0.652`** (`Ref 58497893`) | - | `Exp #012(0.654)` 比 `-0.002`。`c_sk 0.85→0.65` 緩和（OOFでも `-0.00148`）や `Gates` 強度の影響を確認、v2本命は `lam=0.25` ＆ `Qwen3-8B` 統合へ |
@@ -36,6 +38,29 @@
 ---
 
 ## 実験詳細
+
+### 実験 #015: 異ファミリー `Meta-Llama-3.1-8B (24L)` 8層読み出し LoRA 追加（7バックボーン統合）
+- **実施日:** 2026-11-19〜2026-11-20
+- **担当・実施者:** 学習者本人 ＆ Antigravity（Colab L4 GPU 4-bit NF4 QLoRA 学習 → ローカル OOF / Nested-CV 検証 → Kaggle `T4 x2` 推論カーネル）
+
+#### 1. 仮説 (Hypothesis)
+- Exp #014（`0.660` LB）までのニューラルバックボーンは `Qwen3` 系 3 モデルと BERT/DeBERTa 系の 2 系統のみであり、Tiktoken 128k 語彙・Meta 事前学習コーパスを持つ完全異ファミリーの **`Meta-Llama-3.1-8B`**（先頭 24 層切り詰め＋`[2, 4, 6, 8, 12, 16, 20, 24]` 8層適応読み出し）を加えれば、低相関・直交特徴の寄与で `0.660` プラトーを突破できるはず。
+
+#### 2. 実験内容 (Method)
+- **Colab L4 GPU 学習 (`exp015_colab_l4_llama3_8b.py`):**
+  - `NousResearch/Meta-Llama-3.1-8B`（32層→24層、`5.79B` パラメータ、`4-bit NF4 QLoRA`、`max_vram=10.64GB`）に対し、`tier0_instyle` 優先の 36,000 件（`tier0=32,455`、`cap/cls=2,000`）で Stage 1 (1 epoch) 学習後、`stage1_best/` チェックポイントを Kaggle Private Dataset へ保存。
+  - `--resume-s1` ＋ Fold 毎逐次保存（`run-62369b`）で `StratifiedGroupKFold(5)` Stage 2（5 epochs）を全 Fold 完走し、`nobuyukikumagai/name-that-llm-exp015-llama3-8b-lora` へ 5 Fold 重み＋OOF を登録。
+- **ブレンド最適化 & 相関確認 (`eval_exp015_blend.py`):**
+  - `Llama3-8B` 単体 OOF は **`0.57164`**（予測相関: vs `Qwen3-4B` **`0.7870`**, vs `ModernBERT-L` **`0.7649`**, vs `DeBERTa-v3-L` **`0.7698`**, vs `Qwen3-8B` **`0.8539`**）。
+  - ニューラル平均 (`Exp #014` ベース 90% + `Llama3-8B` 10%: `0.225 Q3-8B + 0.2025 Q3-4B + 0.2025 MB-L + 0.135 Deb-L + 0.10125 Q3-1.7B + 0.03375 MB-B + 0.10 Llama3-8B`) により、ニューラル単体平均 OOF が `0.64350 → 0.64943`（15% 時 `0.65128`）、フルパイプライン OOF が `0.72906 → 0.73165`（Val-Split OOF `0.73016 → 0.73202`）へ向上。Nested-CV でも 5/5 全 Fold が `w_ll > 0` を選出。
+- **統合推論 (`submission_exp015.py`):**
+  - Kaggle Models `alexchilton/llama-3-1-8b-base/Transformers/default/1` を読み込み時に `num_hidden_layers=24` へ切り詰め、`T4 x2` で `fp16` `device_map="auto"` ＋ Fold ごとの差分 LoRA 加減算で推論（`nobuyukikumagai/name-that-llm-exp015-full-ensemble` v1 実行中）。
+
+#### 3. 結果 (Result) & 次の一手 (Next)
+- **手元 OOF / クラス別再現率:** フルパイプライン OOF **`0.73165`**（`w_ll=0.10`、Val-Split **`0.73202`**、`Exp #014` `0.72906` 比 **`+0.00259`**）。難関クラス `claude-fable-5` (`0.450→0.470`) や `gpt-6-astra` (`0.907→0.933`) 等の再現率が向上。
+- **次の一手:** `submission_exp015.py` Commit 完了・提出後 Public LB を確認。A100 空き次第 `Qwen3-14B (27L)`（[exp015_colab_a100_qwen3_14b.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/exp015_colab_a100_qwen3_14b.py)）および埋め込み空間 Two-Way 中心化＋ガウス共分散ヘッド（`GAUSS_HEAD`）の検証へ進む。
+
+---
 
 ### 実験 #014: StyleGram v1+v2 併用 ＋ Family Gate 調整 (`lam=0.15`) ＋ Cluster Sinkhorn (`0.85`) 戻し
 - **実施日:** 2026-11-18〜2026-11-19
