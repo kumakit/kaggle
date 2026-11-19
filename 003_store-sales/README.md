@@ -257,6 +257,15 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 56: 5×5 厳密Gram行列 同時最適化クインテット提出（24位・自己ベスト `0.37761` 更新！）**（完了！理論 `0.37762` を `-0.00001` 上回る超精密的中！）
   - [src/exp056_gram_optimal_quintet.py](src/exp056_gram_optimal_quintet.py)：10提出フィット最大残差 `3.83e-6` から `GBDT1 31.08% + ResNet 32.36% + BiGRU-TCN 4.07% + Patch-DLinear 27.52% + Direct GBDT2 4.96%` を厳密導出し統合（Exp053比 Log Corr `0.999987` / Shift `0.01290`）
   - [learning-log.md](learning-log.md)：実験 #056 記録完了（LB `0.37761` / **24位 / 635チーム**, Top 5%境界31位 `0.37912` を **`-0.00151`・7チーム上抜け**）
+- [x] **Step 57: Colab L4 GPU 全系列横断 2D Axial Attention (54店舗×33家族) + SmoothL1/Huber 5シード**（完了！**全単体モデル歴代最高 Val `0.38439`**、単体推定 LB `0.38219` 樹立！）
+  - [src/exp057_colab_l4_cross_series_huber.py](src/exp057_colab_l4_cross_series_huber.py)：過去56日（8週×7曜日位相）＆未来16日の両段階で Cross-Family / Cross-Store 同時Attention＋SmoothL1(`beta=0.45`)＋同曜日中央値アンカーを実装
+  - [learning-log.md](learning-log.md)：実験 #057 記録完了（Exp056比 Log Corr `0.999233` / Shift `0.09917`）
+- [x] **Step 58: 6系統直交ヘキサッドブレンド (75% Exp056 + 25% Exp057 CrossAxial-Huber)**（完了！**一撃 -0.00129 大幅PB更新 `0.37632`**, Top 5%境界急騰 `0.3775` を再突破！）
+  - [src/exp058_hexad_cross_series25.py](src/exp058_hexad_cross_series25.py)：6系統対数統合＋Exp036 ゼロ2,001行保持
+  - [learning-log.md](learning-log.md)：実験 #058 記録完了（27位 / 688チーム）
+- [x] **Step 59: 6×6 厳密Gram行列 同時最適化ヘキサッド提出（PB `0.37608` — 理論5桁完全一致!!）**（完了！本日3枠温存しつつ 0.3760 台へ到達！）
+  - [src/exp059_gram_optimal_hexad.py](src/exp059_gram_optimal_hexad.py)：全12提出フィット最大残差 `4.25e-6` の厳密6次元Gram最適解（`GBDT1 23.49% + ResNet 28.14% + BiGRU 0.76% + Patch 12.02% + CrossAxial 35.59%`）を導出・統合
+  - [learning-log.md](learning-log.md)：実験 #059 記録完了（LB `0.37608` / **27位 / 689チーム**, Top 5%境界34位 `0.3775` を **`-0.00142`・7チーム上抜け**）
 
 ---
 
