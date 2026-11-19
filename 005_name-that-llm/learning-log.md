@@ -11,7 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
-| **#014** | **6バックボーン（Exp #013同一）＋ `SGv1(0.35)`＋`SGv2(0.35)`併用 ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(alpha=0.85)` ＋ `GLM-5.3/Flash`** | **`0.72906`** (Nested-CV **`0.72794`**, 3/5 Fold一致選出) | *PENDING* (`Ref 58526363`) | - | `SGv1`（`train.csv`特化）+ `SGv2`（44.7k外部プール）併用＋`c_sk=0.85`戻し。Commit **`32.8m`** 完走（`Part 1+2` `367.0s`, `Qwen3-8B` `134.1s`） |
+| **#014** | **6バックボーン（Exp #013同一）＋ `SGv1(0.35)`＋`SGv2(0.35)`併用 ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(alpha=0.85)` ＋ `GLM-5.3/Flash`** | **`0.72906`** (Nested-CV **`0.72794`**, 3/5 Fold一致選出) | **`0.660`** (`Ref 58526363`) | **`2,517 位`** / 6,422 チーム | **Exp #013 と同点 `0.660` プラトー確認**（Nested-CV は `+0.00111` 改善）。後処理・TF-IDF 配合の上限に達し、次手は大型・異ファミリーモデル＆`GAUSS_HEAD` へ移行 |
 | **#013** | **6バックボーン (`25% Qwen3-8B_v2[6..36] + 22.5% 4B + 22.5% MB-L + 15% Deb-L + 11.25% 1.7B + 3.75% MB-B`) ＋ `StyleGram v2(0.65)` ＋ `Family Gates(lam=0.25)` ＋ 緩和 Sinkhorn (`0.65/0.35`) ＋ `Exp #010 GLM-5.3/Flash`** | **`0.72979`** (Nested-CV **`0.72683`**, Qwen3-8B単体 `0.59570` / SGv2単体 **`0.49377`**) | **`0.660`** (`Ref 58503553`) | **`2,437 位`** / 6,323 チーム | **+0.006 自己ベスト更新（Exp #013a 比 +0.008、`+53`順位上昇）！** Top 38.5%。`Qwen3-8B v2` を `T4x2 device_map="auto"` で `198.8s` 推論、Kernel `42.6m` 完走 |
 | **#013a** | (先行検証) 5バックボーン（Exp #012構成）＋ `StyleGram v2(0.50)` ＋ `Family Gates(lam=0.35)` ＋ 緩和 Sinkhorn (`0.65/0.35`) ＋ `Exp #010 GLM-5.3/Flash` | **`0.72350`** (`StyleGram v2` 単体 **`0.49377`**) | **`0.652`** (`Ref 58497893`) | - | `Exp #012(0.654)` 比 `-0.002`。`c_sk 0.85→0.65` 緩和（OOFでも `-0.00148`）や `Gates` 強度の影響を確認、v2本命は `lam=0.25` ＆ `Qwen3-8B` 統合へ |
 | **#012** | **5バックボーン幾何平均 (`30% 4B + 30% MB-L + 20% Deb-L[6,24] + 15% 1.7B + 5% MB-B`) ＋ `Exp #011 StyleGram(0.35)` ＋ `capped_agglo` Cluster/Global Sinkhorn (`0.85/0.35`) ＋ `Exp #010 GLM-5.3/Flash` (`cov=0.30, w=1.15`)** | **`0.72128`** (Nested-CV **`0.72127`**, 4/5一致) | **`0.654`** (`Ref 58483891`) | **`2,490 位`** / 6,249 チーム | **+0.020 大幅更新（Exp #010 比 +314位上昇）！** Top 39.8%到達。`DeBERTa-v3-large [6,24]` `0.58236` + StyleGram + Sinkhorn 統合 |
@@ -47,7 +47,12 @@
 
 #### 2. 実験内容 & 結果 (`submission_exp014.py`)
 - **Nested-CV:** **`0.72794`**（`Exp #013` `0.72683` 比 **`+0.00111`**、5 Fold 中 Fold 2/4/5 が一致して `(sg1=0.35, sg2=0.35, lam=0.15, c_sk=0.85)` を選出、同構成 OOF **`0.72906`**）。
-- **Kaggle Commit (`nobuyukikumagai/name-that-llm-exp014-full-ensemble` v1):** **`32.8m`** 完走（`[QWEN3-8B] 134.1s`, `[StyleGram v2] 9.8s`, `[StyleGram v1] 10.4s`, `Part 1+2 367.0s`, `Flash 617s`, `GLM-5.3 979s`）、`submission.parquet (3, 2)` 検証通過 → **`Ref 58526363` 本番提出済み（PENDING）**。
+- **Kaggle Commit (`nobuyukikumagai/name-that-llm-exp014-full-ensemble` v1):** **`32.8m`** 完走（`[QWEN3-8B] 134.1s`, `[StyleGram v2] 9.8s`, `[StyleGram v1] 10.4s`, `Part 1+2 367.0s`, `Flash 617s`, `GLM-5.3 979s`）、`submission.parquet (3, 2)` 検証通過。
+- **Public LB 結果 (`Ref 58526363`):** **`0.660`**（**`2,517 位 / 6,422 チーム`**, 上位 `39.2%`, Exp #013 `0.660` と完全同点タイ。Top 33% `0.666`, Top 25% `0.682`, Bronze `0.702`）。
+
+#### 3. 考察 & 次の一手 (Insights & Next)
+- 後処理（`SGv1+SGv2` 併用・`c_sk=0.85` 戻し・`lam=0.15`）では Nested-CV が `0.72683→0.72794` へ伸びた一方、本番 LB は `0.660` の平坦プラトー（同一構成近傍の極大値）を確認。
+- これ以上の大幅更新（`0.68+`〜`0.70+` Bronze 圏）には、現行 6 モデル（線形ヘッド）の枠を超える **大型・異ファミリーモデル (`Qwen3-14B` / `GLM-4-9B` / `Llama-3.1-8B`)** および **埋め込み空間 Two-Way 除去＋ガウス共分散ヘッド (`GAUSS_HEAD`)** の導入が必要。
 
 ---
 

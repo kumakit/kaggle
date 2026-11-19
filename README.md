@@ -26,7 +26,7 @@ GitHub Issue（[kumakit/mission-control#402](https://github.com/kumakit/mission-
 | **002** | **Playground S6E10 (Airline Satisfaction)** | [`002_airline-satisfaction/`](002_airline-satisfaction/) | Playground / 航空会社顧客満足度予測 (2値分類・ROC AUC) | **自己ベスト 0.96084 / 3桁856位達成！🏆** | [実践ガイド](002_airline-satisfaction/README.md) |
 | **003** | **Store Sales - Time Series Forecasting** | [`003_store-sales/`](003_store-sales/) | Getting Started / 店舗売上の時系列需要予測 (回帰・RMSLE) | **自己ベスト 0.37761 / 24位 (Top 3.8%🥈) ([#407](https://github.com/kumakit/mission-control/issues/407))** | [実践ガイド](003_store-sales/README.md) |
 | **004** | **Playground S6E11 (Credit Card Fraud Detection)** | [`004_credit-card-fraud/`](004_credit-card-fraud/) | Playground / クレジットカード不正検知 (2値分類・ROC AUC) | **完結: 0.95349 / 14位 (Top 0.94%🥇) ([#435](https://github.com/kumakit/mission-control/issues/435))** | [総括レポート](004_credit-card-fraud/README.md) |
-| **005** | **Name That LLM** | [`005_name-that-llm/`](005_name-that-llm/) | Featured / 生成LLM識別 (18クラス分類・Balanced Accuracy) | **進行中: 0.660 / 2,437位 (Top 38.5%) ([#444](https://github.com/kumakit/mission-control/issues/444))** | [実践ガイド](005_name-that-llm/README.md) |
+| **005** | **Name That LLM** | [`005_name-that-llm/`](005_name-that-llm/) | Featured / 生成LLM識別 (18クラス分類・Balanced Accuracy) | **進行中: 0.660 / 2,517位 (Top 39.2%) ([#444](https://github.com/kumakit/mission-control/issues/444))** | [実践ガイド](005_name-that-llm/README.md) |
 
 
 ---
