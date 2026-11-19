@@ -266,6 +266,12 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 59: 6×6 厳密Gram行列 同時最適化ヘキサッド提出（PB `0.37608` — 理論5桁完全一致!!）**（完了！本日3枠温存しつつ 0.3760 台へ到達！）
   - [src/exp059_gram_optimal_hexad.py](src/exp059_gram_optimal_hexad.py)：全12提出フィット最大残差 `4.25e-6` の厳密6次元Gram最適解（`GBDT1 23.49% + ResNet 28.14% + BiGRU 0.76% + Patch 12.02% + CrossAxial 35.59%`）を導出・統合
   - [learning-log.md](learning-log.md)：実験 #059 記録完了（LB `0.37608` / **27位 / 689チーム**, Top 5%境界34位 `0.3775` を **`-0.00142`・7チーム上抜け**）
+- [x] **Step 60: Colab L4 GPU Gen-2 112日窓 Tri-Axial Attention + 季節トレンド分解 5シード**（完了！単体推定 LB **`0.38446`**・歴代2位の直交表現獲得！）
+  - [src/exp060_colab_l4_cross_triaxial_decomp.py](src/exp060_colab_l4_cross_triaxial_decomp.py)：112日(16週×7曜日) ＋ DLinear季節トレンド分解 ＋ 3軸 Horizon×Family×Store Attention ＋ Hybrid損失(`0.60 MSE + 0.40 SmoothL1`)
+  - [learning-log.md](learning-log.md)：実験 #060 記録完了（Val Raw `0.39892`, Exp059比 Log Corr `0.999369` / Shift `0.09217`）
+- [x] **Step 61: 7系統直交ヘプタッドブレンド (`90% Exp059 + 10% Exp060`, PB `0.37591` — 0.375台突入!!)**（完了！**26位 / 693チーム**へ浮上、本日残り2枠温存！）
+  - [src/exp061_heptad_triaxial10.py](src/exp061_heptad_triaxial10.py)：7×7厳密Gram解析により全14提出誤差 `4e-6` 精度で同時最適解（`0.37590`, `[20.4%, 25.8%, 1.0%, 10.0%, 0%, 30.1%, 12.7%]`）を特定
+  - [learning-log.md](learning-log.md)：実験 #061 記録完了（Top 5%境界34位 `0.37723` を **`-0.00132`・8チーム上抜け**）
 
 ---
 
