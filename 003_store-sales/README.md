@@ -272,6 +272,9 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 61: 7系統直交ヘプタッドブレンド (`90% Exp059 + 10% Exp060`, PB `0.37591` — 0.375台突入!!)**（完了！**26位 / 693チーム**へ浮上、本日残り2枠温存！）
   - [src/exp061_heptad_triaxial10.py](src/exp061_heptad_triaxial10.py)：7×7厳密Gram解析により全14提出誤差 `4e-6` 精度で同時最適解（`0.37590`, `[20.4%, 25.8%, 1.0%, 10.0%, 0%, 30.1%, 12.7%]`）を特定
   - [learning-log.md](learning-log.md)：実験 #061 記録完了（Top 5%境界34位 `0.37723` を **`-0.00132`・8チーム上抜け**）
+- [x] **Step 62: 7×7 厳密Gram行列 同時最適化ヘプタッド提出（PB `0.37590` — 理論5桁完全一致!!）**（完了！31位 / 698チーム・Top 5%境界 `0.37704` 上抜け！）
+  - [src/exp062_gram_optimal_heptad.py](src/exp062_gram_optimal_heptad.py)：14提出フィット最大残差 `4.22e-6` の厳密7次元Gram最適解を提出
+  - [learning-log.md](learning-log.md)：実験 #062 記録完了（理論 `0.37590` = 実測 `0.37590`、本日残り4枠）
 
 ---
 
