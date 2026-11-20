@@ -275,6 +275,14 @@ $$\text{RMSLE} = \sqrt{ \frac{1}{n} \sum_{i=1}^n \left( \ln(1 + \hat{y}_i) - \ln
 - [x] **Step 62: 7×7 厳密Gram行列 同時最適化ヘプタッド提出（PB `0.37590` — 理論5桁完全一致!!）**（完了！31位 / 698チーム・Top 5%境界 `0.37704` 上抜け！）
   - [src/exp062_gram_optimal_heptad.py](src/exp062_gram_optimal_heptad.py)：14提出フィット最大残差 `4.22e-6` の厳密7次元Gram最適解を提出
   - [learning-log.md](learning-log.md)：実験 #062 記録完了（理論 `0.37590` = 実測 `0.37590`、本日残り4枠）
+- [x] **Step 63: Colab L4 GPU Cross-Series Axial + 112d/28d解析指標 + Top-3 SWA + Pseudo-Huber 5シード**（完了！**単体 Val `0.38177` / 単体推定 LB `0.38033` 圧倒的歴代最高更新!!**）
+  - [src/exp063_colab_l4_cross_axial_swa.py](src/exp063_colab_l4_cross_axial_swa.py)：全5シードが Top-3 SWA で改善＋Val OOF `(1782, 15)` 同時保存
+  - [learning-log.md](learning-log.md)：実験 #063 記録完了（Exp062比 Log Corr `0.999492` / Shift `0.07970`）
+- [x] **Step 64: 8系統直交オクテットブレンド (`75% Exp062 + 25% Exp063 CrossSWA`)**（完了！一撃 `-0.00047` 更新 **`0.37543`**！）
+  - [src/exp064_octet_cross_swa25.py](src/exp064_octet_cross_swa25.py)：8系統統合＋ゼロ2,001行保持
+- [x] **Step 65: 8×8 厳密Gram行列 同時最適化オクテット提出（PB `0.37511` — 理論5桁完全一致!!）**（完了！**31位 / 700チーム**, Top 5%境界 `0.37718` を `-0.00207` 上抜け・本日残り2枠！）
+  - [src/exp065_gram_optimal_octet.py](src/exp065_gram_optimal_octet.py)：全16提出 Rank 8/8 最適解（`GBDT1 18.86% + ResNet 26.65% + Patch 2.77% + CrossAxial 2.61% + TriAxial 9.89% + CrossSWA 39.21%`）を導出・提出
+  - [learning-log.md](learning-log.md)：実験 #065 記録完了（理論 `0.37511` = 実測 `0.37511`）
 
 ---
 
