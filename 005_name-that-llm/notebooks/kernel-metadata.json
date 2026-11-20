@@ -1,7 +1,7 @@
 {
-  "id": "nobuyukikumagai/name-that-llm-exp015-full-ensemble",
-  "title": "name that llm exp015 full ensemble",
-  "code_file": "submission_exp015.py",
+  "id": "nobuyukikumagai/name-that-llm-exp016-full-ensemble",
+  "title": "name that llm exp016 full ensemble",
+  "code_file": "submission_exp016.py",
   "language": "python",
   "kernel_type": "script",
   "is_private": "true",
@@ -9,6 +9,7 @@
   "enable_tpu": "false",
   "enable_internet": "false",
   "dataset_sources": [
+    "nobuyukikumagai/name-that-llm-exp016-gauss-assets",
     "nobuyukikumagai/name-that-llm-exp015-llama3-8b-lora",
     "nobuyukikumagai/name-that-llm-exp013-qwen3-8b-lora",
     "nobuyukikumagai/name-that-llm-exp013-stylegram-v2",
@@ -30,6 +31,7 @@
     "estopadilla/ntl-glm-likelihood-train"
   ],
   "model_sources": [
+    "qwen-lm/qwen-3-embedding/Transformers/8b/1",
     "alexchilton/llama-3-1-8b-base/Transformers/default/1",
     "qwen-lm/qwen-3/Transformers/8b-base/1",
     "qwen-lm/qwen-3/Transformers/4b-base/1",

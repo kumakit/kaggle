@@ -11,6 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#016** | **7バックボーン ＋ `Gauss Head` (Two-Way話題除去＋Ledoit-Wolf共分散: `Llama3_S1`+`Qwen3-8B_Base`, `d=256, T=3.0, w_g=1.8`) ＋ `Qwen3-Emb-8B`クラスタ (`thr=0.65`) ＋ `Global Sinkhorn(0.30)` (`c_sk=0.00`) ＋ `GLM-5.3/Flash`** | **`0.75130`** (Nested-CV **`0.75094`** / 単体Gauss: `Llama_S1` `0.62201`, `Q8_Base` `0.61014`, `Q8_OOF` `0.64757` / c_sk無しベース `0.69387` 比 **`+0.05743`**) | *(Commit 実行中)* | - | **`Cluster Sinkhorn(0.85)` 完全廃止**＋`Qwen3-Emb` (ARI `0.9852`)＋未学習/S1特徴による純粋確率周辺化・反発EM統合。50%分断クラスタ耐性 (`0.69389`) も確認済み |
 | **#015** | **7バックボーン (`+10% Llama-3.1-8B 24L 8層読み出し`) ＋ `SGv1(0.35)`＋`SGv2(0.35)` ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(0.85)` ＋ `GLM-5.3/Flash`** | **`0.73165`** (Val-Split **`0.73202`** / Neural `0.64350→0.64943` / `Llama3-8B`単体 `0.57164`) | **`0.660`** (`Ref 58606868`) | **`2,616 位`** / 6,544 チーム | **Exp #013/#014/#015 が 3 連続 `0.660`（プラトー確定）**。OOF `+0.00259` に対し `Cluster Sinkhorn(0.85)`・TF-IDF クラスタ中心化依存が未知テスト分布と乖離している可能性が高く、次手は **`gauss.py`（埋め込み Two-Way 共分散ヘッド）＆ `Qwen3-Embedding` クラスタリング** へ移行 |
 | - | (参考) Exp #015 単体: Stage 1 In-Style優先 36k + 5-Fold Stage 2 `Meta-Llama-3.1-8B (24L)` QLoRA | `0.57164` (`[0.57222, 0.58519, 0.59259, 0.55096, 0.55741]`) | - | - | Stage 1 Zero-Shot `0.51087` (`Pool-Val 0.52654`)。`nobuyukikumagai/name-that-llm-exp015-llama3-8b-lora` 保存完了 |
 | **#014** | **6バックボーン（Exp #013同一）＋ `SGv1(0.35)`＋`SGv2(0.35)`併用 ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(alpha=0.85)` ＋ `GLM-5.3/Flash`** | **`0.72906`** (Nested-CV **`0.72794`**, 3/5 Fold一致選出) | **`0.660`** (`Ref 58526363`) | **`2,517 位`** / 6,422 チーム | **Exp #013 と同点 `0.660` プラトー確認**（Nested-CV は `+0.00111` 改善）。後処理・TF-IDF 配合の上限に達し、次手は大型・異ファミリーモデル＆`GAUSS_HEAD` へ移行 |
@@ -38,6 +39,31 @@
 ---
 
 ## 実験詳細
+
+### 実験 #016: Two-Way ガウス共分散ヘッド (`gauss_head.py`) ＋ `Qwen3-Embedding-8B` クラスタリング ＋ `Cluster Sinkhorn` 廃止
+- **実施日:** 2026-11-20〜2026-11-21
+- **担当・実施者:** 学習者本人 ＆ Antigravity（Colab L4 特徴抽出 → ローカル 5-Fold In-Fold CV / Nested-CV → Kaggle `T4 x2` 推論カーネル）
+
+#### 1. 仮説 (Hypothesis)
+- Exp #013〜#015 で CV `0.729→0.732` と改善しつつ LB `0.660` で横ばいだった主因は、`Cluster Sinkhorn(0.85)` が `train.csv` 特有の 18 択均等クラスタ構造を強制しすぎていた点にある。
+- `Qwen/Qwen3-Embedding-8B` による高精度クラスタリング（`thr=0.65`）と、既存学習済み重み（未調整 `Qwen3-8B-Base` と Stage-1 未見 `Llama-3.1-8B 24L`）の隠れ表現に対する **Two-Way 話題除去＋Ledoit-Wolf 共分散 (`gauss_head.py`) ＋ 厳密周辺化 / 反発 EM** を統合し、`Cluster Sinkhorn` を廃止（`Global Sinkhorn 0.30` のみ）にすれば、リークなし・ドメイン堅牢性を保ったまま大幅な CV/LB 更新が見込める。
+
+#### 2. 実験内容 (Method)
+- **Colab L4 特徴抽出 (`exp016_colab_l4_extract_assets.py`):**
+  - 再学習なしで `train.csv` 2,699 行の埋め込み `fp16` を抽出し、`nobuyukikumagai/name-that-llm-exp016-gauss-assets` へ登録（`max_vram=18.01GB`, ~14分完了）。
+- **ローカル 5-Fold In-Fold & Nested-CV (`gauss_head.py`, `eval_exp016_gauss_cv.py`):**
+  - `Qwen3-Embedding-8B` クラスタリング精度（vs 真 `prompt_id`）：`thr=0.60` で **ARI `0.9873`**、`thr=0.65` で **ARI `0.9852`**（`grp2..18=99.7%`、TF-IDF `0.9750` を上回る）。
+  - Strict In-Fold `gauss_head.fit` (4 folds 学習 → held-out fold の教師なし `Qwen3-Emb` クラスタ評価, `d=256, T=3.0`) 単体 OOF: `Z_llama_s1` **`0.62201`**（Stage-2 線形ヘッド `0.57164` 比 `+0.05037`）、`Z_qwen8b_base` **`0.61014`**、`Z_qwen8b_oof` **`0.64757`**。
+  - `Cluster Sinkhorn=0.00, Global Sinkhorn=0.30` 統合で、Exp #015 ベース (`0.69387`) → `0.5 * Llama_S1 + 0.5 * Qwen8B_Base` (`w_g=1.8`) 統合時に **Fold-OOF `0.75130` (`+0.05743`)**、Strict **5-Fold Nested-CV `0.75094`**（`[2.0, 1.4, 2.0, 2.0, 2.0]`）を達成（`train.csv` に一切適合していない純粋表現同士のみで構成）。
+  - また 50% の行を強制シングルトン化する分断ストレス検証でも `0.69389`（Exp #015 ベース `0.69387` 以上）を維持し、クラスタ欠損耐性を確認。
+- **統合推論 (`submission_exp016.py`):**
+  - `Qwen3-Embedding-8B` でテスト文をクラスタリングし、`LLAMA3-8B` ロード時に Stage-1 特徴パス、`QWEN3-8B` ロード時に Base 特徴パスを追加（再ロードなし）。CPU で `gauss_fit`＋`gauss_scores` を実行し、`nobuyukikumagai/name-that-llm-exp016-full-ensemble`（v1）をプッシュ・実行中。
+
+#### 3. 結果 (Result) & 次の一手 (Next)
+- **手元検証:** `c_sk=0.00` 環境下で `0.69387 → 0.75130`（Nested-CV **`0.75094`**）、従来ベスト OOF (`0.73165`) 比でも **`+0.01965`** 更新。
+- **次の一手:** `nobuyukikumagai/name-that-llm-exp016-full-ensemble` v1 の Commit 完了後、提出して **`0.660` プラトーの突破 (Public LB 検証)** を確認する。
+
+---
 
 ### 実験 #015: 異ファミリー `Meta-Llama-3.1-8B (24L)` 8層読み出し LoRA 追加（7バックボーン統合）
 - **実施日:** 2026-11-19〜2026-11-20
