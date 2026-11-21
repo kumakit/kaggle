@@ -11,7 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
-| **#017a** | **7バックボーン ＋ 安全スケール Grouped-only `Gauss Head` (`d=128, W_GAUSS=0.22`, Singleton=0.0) ＋ `Qwen3-Emb-8B(0.65)` ＋ `Sinkhorn(0.65/0.35)` ＋ `GLM-5.3/Flash`** | **Nested-CV `0.74018`**（全 5/5 Fold一致選出 `(0.22, 0.65)`, vs Exp #015 `0.73203` 比 **`+0.00815`**, vs Exp #015一致率 `96.6%`） | *(Commit 実行中)* | - | `std` 過大上書きを解消（`bl_std≈3.24`, `glm_chg=0.080`）。さらに上位解法同様 Singleton 行の Gauss 適用を `0.0` に遮断し安全化 |
+| **#017a** | **7バックボーン ＋ 安全スケール Grouped-only `Gauss Head` (`d=128, W_GAUSS=0.22`, Singleton=0.0) ＋ `Qwen3-Emb-8B(0.65)` ＋ `Sinkhorn(0.65/0.35)` ＋ `GLM-5.3/Flash`** | **Nested-CV `0.74018`**（全 5/5 Fold一致選出 `(0.22, 0.65)`, vs Exp #015 `0.73203` 比 **`+0.00815`**, vs Exp #015一致率 `96.6%`） | **`0.652`** (`Ref 58676066`) | (`0.660`維持) | **負の知見 (`-0.008` vs Exp #015 `0.660`)**: Exp #016 (`0.601`) から `+0.051` 回復も `0.660` を下回る。Nested-CV `+0.00815` と LB 符号が逆転しており、`train.csv` 共分散ヘッド (`Gauss`) のテスト分布シフト不適合、または `Qwen3-Emb(0.65)`＋`c_sk=0.65` 変更との複合影響が疑われる |
 | **#016** | **7バックボーン ＋ `Gauss Head` (`Llama3_S1`+`Qwen3-8B_Base`, `d=256, T=3.0, w_g=1.8`) ＋ `Qwen3-Emb-8B`クラスタ (`thr=0.65`) ＋ `Global Sinkhorn(0.30)` (`c_sk=0.00`) ＋ `GLM-5.3/Flash`** | **`0.75130`** (Nested-CV **`0.75094`** / 単体Gauss: `Llama_S1` `0.62201`, `Q8_Base` `0.61014` / **Singleton単体: `0.48676`**) | **`0.601`** (`Ref 58642937`) | **`2,685 位`** / 6,600 チーム | **負の知見特定 (`-0.059`)**: `1.8 * gauss_comb` の対数確率標準偏差が **`12.145`**（7バックボーン `2.097` の約6倍、`GLM 1.15*ll` `1.486` の約8倍）に達し、既存 7 モデル＋GLM を完全に上書き。Singleton 精度 `0.48676`（`Q8_Base` `0.40969`）＆`train.csv` 共分散過適合によりテストで崩落 |
 | **#015** | **7バックボーン (`+10% Llama-3.1-8B 24L 8層読み出し`) ＋ `SGv1(0.35)`＋`SGv2(0.35)` ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(0.85)` ＋ `GLM-5.3/Flash`** | **`0.73165`** (Val-Split **`0.73202`** / Neural `0.64350→0.64943` / `Llama3-8B`単体 `0.57164`) | **`0.660`** (`Ref 58606868`) | **`2,616 位`** / 6,544 チーム | **Exp #013/#014/#015 が 3 連続 `0.660`（プラトー確定）**。OOF `+0.00259` に対し `Cluster Sinkhorn(0.85)`・TF-IDF クラスタ中心化依存が未知テスト分布と乖離している可能性が高く、次手は **`gauss.py`（埋め込み Two-Way 共分散ヘッド）＆ `Qwen3-Embedding` クラスタリング** へ移行 |
 | - | (参考) Exp #015 単体: Stage 1 In-Style優先 36k + 5-Fold Stage 2 `Meta-Llama-3.1-8B (24L)` QLoRA | `0.57164` (`[0.57222, 0.58519, 0.59259, 0.55096, 0.55741]`) | - | - | Stage 1 Zero-Shot `0.51087` (`Pool-Val 0.52654`)。`nobuyukikumagai/name-that-llm-exp015-llama3-8b-lora` 保存完了 |
@@ -56,7 +56,17 @@
   - `Qwen3-8B OOF`: Grouped `0.64422` / Singleton `0.50379`
 - Grouped-only `0.5 * Llama_S1 + 0.5 * Q8_Base (d=128)` の Strict 5-Fold Nested-CV (`w_g in [0.00, 0.15, 0.22] x c_sk in [0.35, 0.65]`):
   - **5/5 全 Fold 一致で `(w_g=0.22, c_sk=0.65)` を選出、Nested-CV `0.74018`**（`Exp #015` ベース `0.73203` 比 **`+0.00815`**、予測一致率 `~96.6%`）。
-- 推論カーネル [submission_exp017.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/notebooks/submission_exp017.py)（AST 単体テスト `singleton=0.0` & `exact3/em12` 合格）を `nobuyukikumagai/name-that-llm-exp017-full-ensemble`（v1）へプッシュ・実行中。
+- 推論カーネル [submission_exp017.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/notebooks/submission_exp017.py)（AST 単体テスト `singleton=0.0` & `exact3/em12` 合格）を `nobuyukikumagai/name-that-llm-exp017-full-ensemble`（v1）へプッシュ・実行完了。
+
+#### 3. 結果 (Result) & 考察・次の一手 (Next)
+- **Kaggle Commit (`34.9m`, OOM/エラー 0) & Public LB (`Ref 58676066`):** **`0.652`**（Exp #016 `0.601` からは `+0.051` 回復したが、ベスト `0.660` 比 **`-0.008`**）。
+  - 推論時間内訳: `Qwen3-Emb-8B` `32.3s`, `LLAMA3-8B` `108.2s`, `QWEN3-8B` `123.4s`, `QWEN3-4B` `89.8s`, `ModernBERT-L` `31.2s`, `DeBERTa-v3-L` `33.3s`, `QWEN3-1.7B` `37.8s`, `ModernBERT-B` `16.5s`, `StyleGram v2/v1` `9.9s/10.3s`, `GAUSS HEAD` `19.2s`（Part 1+2 合計 `516.3s`）、`GLM Flash/5.3` `599s/971s`。
+- **考察（CV–LB 符号逆転の切り分け）:**
+  - テスト時の `Gauss` 特徴抽出パス（`F.layer_norm` mean pool・`fp16`・`Stage1` LoRA 加減算）自体は `exp016_colab_l4_extract_assets.py` とコード上同一であることを確認。
+  - Exp #015 (`0.660`) からの変更点は **① `Gauss Head (d=128, w_g=0.22)` 追加、② クラスタリング `TF-IDF → Qwen3-Emb-8B(thr=0.65)` 変更、③ `c_sk 0.85 → 0.65` 緩和** の 3 点。
+  - `train.csv` (2,699行) 上のみでフィットする `Gauss Head` は同質ドメインな OOF では一致・加算が効いても未知テスト分布では過適合して足を引っ張ったか、あるいは `c_sk 0.85→0.65` ＋クラスタリング変更が効いた可能性が高い（過去 Exp #013a でも `c_sk=0.65` 時は `0.652`）。
+- **次の一手:**
+  - 小手先の後処理や `train.csv` 共分散調整の追求を一度止め、上位解法の本質である **大型・高品質バックボーン本体の増強（Exp #017b: `Qwen3-14B-Base 27L` QLoRA / Colab A100）** へ進むか、もしくは `Gauss=0.0` でクラスタリング/`c_sk` のみを切り分けて確認する。
 
 ---
 
