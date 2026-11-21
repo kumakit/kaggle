@@ -11,6 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#017a** | **7バックボーン ＋ 安全スケール Grouped-only `Gauss Head` (`d=128, W_GAUSS=0.22`, Singleton=0.0) ＋ `Qwen3-Emb-8B(0.65)` ＋ `Sinkhorn(0.65/0.35)` ＋ `GLM-5.3/Flash`** | **Nested-CV `0.74018`**（全 5/5 Fold一致選出 `(0.22, 0.65)`, vs Exp #015 `0.73203` 比 **`+0.00815`**, vs Exp #015一致率 `96.6%`） | *(Commit 実行中)* | - | `std` 過大上書きを解消（`bl_std≈3.24`, `glm_chg=0.080`）。さらに上位解法同様 Singleton 行の Gauss 適用を `0.0` に遮断し安全化 |
 | **#016** | **7バックボーン ＋ `Gauss Head` (`Llama3_S1`+`Qwen3-8B_Base`, `d=256, T=3.0, w_g=1.8`) ＋ `Qwen3-Emb-8B`クラスタ (`thr=0.65`) ＋ `Global Sinkhorn(0.30)` (`c_sk=0.00`) ＋ `GLM-5.3/Flash`** | **`0.75130`** (Nested-CV **`0.75094`** / 単体Gauss: `Llama_S1` `0.62201`, `Q8_Base` `0.61014` / **Singleton単体: `0.48676`**) | **`0.601`** (`Ref 58642937`) | **`2,685 位`** / 6,600 チーム | **負の知見特定 (`-0.059`)**: `1.8 * gauss_comb` の対数確率標準偏差が **`12.145`**（7バックボーン `2.097` の約6倍、`GLM 1.15*ll` `1.486` の約8倍）に達し、既存 7 モデル＋GLM を完全に上書き。Singleton 精度 `0.48676`（`Q8_Base` `0.40969`）＆`train.csv` 共分散過適合によりテストで崩落 |
 | **#015** | **7バックボーン (`+10% Llama-3.1-8B 24L 8層読み出し`) ＋ `SGv1(0.35)`＋`SGv2(0.35)` ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(0.85)` ＋ `GLM-5.3/Flash`** | **`0.73165`** (Val-Split **`0.73202`** / Neural `0.64350→0.64943` / `Llama3-8B`単体 `0.57164`) | **`0.660`** (`Ref 58606868`) | **`2,616 位`** / 6,544 チーム | **Exp #013/#014/#015 が 3 連続 `0.660`（プラトー確定）**。OOF `+0.00259` に対し `Cluster Sinkhorn(0.85)`・TF-IDF クラスタ中心化依存が未知テスト分布と乖離している可能性が高く、次手は **`gauss.py`（埋め込み Two-Way 共分散ヘッド）＆ `Qwen3-Embedding` クラスタリング** へ移行 |
 | - | (参考) Exp #015 単体: Stage 1 In-Style優先 36k + 5-Fold Stage 2 `Meta-Llama-3.1-8B (24L)` QLoRA | `0.57164` (`[0.57222, 0.58519, 0.59259, 0.55096, 0.55741]`) | - | - | Stage 1 Zero-Shot `0.51087` (`Pool-Val 0.52654`)。`nobuyukikumagai/name-that-llm-exp015-llama3-8b-lora` 保存完了 |
@@ -39,6 +40,25 @@
 ---
 
 ## 実験詳細
+
+### 実験 #017a: 安全スケール Grouped-only `Gauss Head` (`d=128, w_g=0.22`) ＋ `Cluster Sinkhorn(0.65)`
+- **実施日:** 2026-11-21
+- **担当・実施者:** 学習者本人 ＆ Antigravity（ローカル 5-Fold アブレーション・Nested-CV → Kaggle `T4 x2` 推論カーネル）
+
+#### 1. 仮説 (Hypothesis)
+- Exp #016（LB `0.601`）の敗因分析で ① `1.8 * gauss_comb` の `std=12.145` 過大上書き、② Singleton 時 `Gauss` 精度 `0.48676`（`Q8_Base 0.40969`）が足を引っ張る点を特定。
+- そこで ① `d=128` 縮小で `train.csv` 共分散過適合を抑え、② `sanpier` 上位解法と同様に **`2 <= size <= 18` のクラスタ行のみへ `Gauss Head` を適用**（Singleton 行は `0.0`）、③ **`W_GAUSS=0.22`（`bl_std≈3.24`、`glm_chg=0.080` 維持）**＋ **`Qwen3-Embedding-8B (thr=0.65)` ＋ `Cluster Sinkhorn(0.65) / Global Sinkhorn(0.35)`** とすれば、既存 7 モデル・GLM の安定性を保ったまま `0.660` を安全に上抜けられるはず。
+
+#### 2. 実験内容 & 手元検証 ([eval_exp017_ablation.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/eval_exp017_ablation.py))
+- `d=128` 単体 OOF（`Qwen3-Emb thr=0.65` vs Singleton）:
+  - `Llama3-8B Stage-1`: Grouped `0.60941` / Singleton `0.47418`
+  - `Qwen3-8B Base`: Grouped `0.60419` / Singleton `0.40264`
+  - `Qwen3-8B OOF`: Grouped `0.64422` / Singleton `0.50379`
+- Grouped-only `0.5 * Llama_S1 + 0.5 * Q8_Base (d=128)` の Strict 5-Fold Nested-CV (`w_g in [0.00, 0.15, 0.22] x c_sk in [0.35, 0.65]`):
+  - **5/5 全 Fold 一致で `(w_g=0.22, c_sk=0.65)` を選出、Nested-CV `0.74018`**（`Exp #015` ベース `0.73203` 比 **`+0.00815`**、予測一致率 `~96.6%`）。
+- 推論カーネル [submission_exp017.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/notebooks/submission_exp017.py)（AST 単体テスト `singleton=0.0` & `exact3/em12` 合格）を `nobuyukikumagai/name-that-llm-exp017-full-ensemble`（v1）へプッシュ・実行中。
+
+---
 
 ### 実験 #016: Two-Way ガウス共分散ヘッド (`gauss_head.py`) ＋ `Qwen3-Embedding-8B` クラスタリング ＋ `Cluster Sinkhorn` 廃止
 - **実施日:** 2026-11-20〜2026-11-21
