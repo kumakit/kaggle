@@ -11,7 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
-| **#016** | **7バックボーン ＋ `Gauss Head` (Two-Way話題除去＋Ledoit-Wolf共分散: `Llama3_S1`+`Qwen3-8B_Base`, `d=256, T=3.0, w_g=1.8`) ＋ `Qwen3-Emb-8B`クラスタ (`thr=0.65`) ＋ `Global Sinkhorn(0.30)` (`c_sk=0.00`) ＋ `GLM-5.3/Flash`** | **`0.75130`** (Nested-CV **`0.75094`** / 単体Gauss: `Llama_S1` `0.62201`, `Q8_Base` `0.61014`, `Q8_OOF` `0.64757` / c_sk無しベース `0.69387` 比 **`+0.05743`**) | *(Commit 実行中)* | - | **`Cluster Sinkhorn(0.85)` 完全廃止**＋`Qwen3-Emb` (ARI `0.9852`)＋未学習/S1特徴による純粋確率周辺化・反発EM統合。50%分断クラスタ耐性 (`0.69389`) も確認済み |
+| **#016** | **7バックボーン ＋ `Gauss Head` (`Llama3_S1`+`Qwen3-8B_Base`, `d=256, T=3.0, w_g=1.8`) ＋ `Qwen3-Emb-8B`クラスタ (`thr=0.65`) ＋ `Global Sinkhorn(0.30)` (`c_sk=0.00`) ＋ `GLM-5.3/Flash`** | **`0.75130`** (Nested-CV **`0.75094`** / 単体Gauss: `Llama_S1` `0.62201`, `Q8_Base` `0.61014` / **Singleton単体: `0.48676`**) | **`0.601`** (`Ref 58642937`) | **`2,685 位`** / 6,600 チーム | **負の知見特定 (`-0.059`)**: `1.8 * gauss_comb` の対数確率標準偏差が **`12.145`**（7バックボーン `2.097` の約6倍、`GLM 1.15*ll` `1.486` の約8倍）に達し、既存 7 モデル＋GLM を完全に上書き。Singleton 精度 `0.48676`（`Q8_Base` `0.40969`）＆`train.csv` 共分散過適合によりテストで崩落 |
 | **#015** | **7バックボーン (`+10% Llama-3.1-8B 24L 8層読み出し`) ＋ `SGv1(0.35)`＋`SGv2(0.35)` ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(0.85)` ＋ `GLM-5.3/Flash`** | **`0.73165`** (Val-Split **`0.73202`** / Neural `0.64350→0.64943` / `Llama3-8B`単体 `0.57164`) | **`0.660`** (`Ref 58606868`) | **`2,616 位`** / 6,544 チーム | **Exp #013/#014/#015 が 3 連続 `0.660`（プラトー確定）**。OOF `+0.00259` に対し `Cluster Sinkhorn(0.85)`・TF-IDF クラスタ中心化依存が未知テスト分布と乖離している可能性が高く、次手は **`gauss.py`（埋め込み Two-Way 共分散ヘッド）＆ `Qwen3-Embedding` クラスタリング** へ移行 |
 | - | (参考) Exp #015 単体: Stage 1 In-Style優先 36k + 5-Fold Stage 2 `Meta-Llama-3.1-8B (24L)` QLoRA | `0.57164` (`[0.57222, 0.58519, 0.59259, 0.55096, 0.55741]`) | - | - | Stage 1 Zero-Shot `0.51087` (`Pool-Val 0.52654`)。`nobuyukikumagai/name-that-llm-exp015-llama3-8b-lora` 保存完了 |
 | **#014** | **6バックボーン（Exp #013同一）＋ `SGv1(0.35)`＋`SGv2(0.35)`併用 ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(alpha=0.85)` ＋ `GLM-5.3/Flash`** | **`0.72906`** (Nested-CV **`0.72794`**, 3/5 Fold一致選出) | **`0.660`** (`Ref 58526363`) | **`2,517 位`** / 6,422 チーム | **Exp #013 と同点 `0.660` プラトー確認**（Nested-CV は `+0.00111` 改善）。後処理・TF-IDF 配合の上限に達し、次手は大型・異ファミリーモデル＆`GAUSS_HEAD` へ移行 |
@@ -59,9 +59,16 @@
 - **統合推論 (`submission_exp016.py`):**
   - `Qwen3-Embedding-8B` でテスト文をクラスタリングし、`LLAMA3-8B` ロード時に Stage-1 特徴パス、`QWEN3-8B` ロード時に Base 特徴パスを追加（再ロードなし）。CPU で `gauss_fit`＋`gauss_scores` を実行し、`nobuyukikumagai/name-that-llm-exp016-full-ensemble`（v1）をプッシュ・実行中。
 
-#### 3. 結果 (Result) & 次の一手 (Next)
-- **手元検証:** `c_sk=0.00` 環境下で `0.69387 → 0.75130`（Nested-CV **`0.75094`**）、従来ベスト OOF (`0.73165`) 比でも **`+0.01965`** 更新。
-- **次の一手:** `nobuyukikumagai/name-that-llm-exp016-full-ensemble` v1 の Commit 完了後、提出して **`0.660` プラトーの突破 (Public LB 検証)** を確認する。
+#### 3. 結果 (Result) & 負の知見・原因特定 (Root Cause) & 次の一手 (Next)
+- **手元検証:** `c_sk=0.00` 環境下で `0.69387 → 0.75130`（Nested-CV **`0.75094`**）、従来ベスト OOF (`0.73165`) 比 `+0.01965` を示した。
+- **Kaggle Commit & Public LB (`Ref 58642937`):** Commit `43.1m` 完走（`[Qwen3-Embedding-8B] 36.8s`, `[LLAMA3-8B] 107.6s`, `[QWEN3-8B] 125.4s`, `[GAUSS HEAD] 21.6s`）→ **Public LB `0.601`**（`Exp #015` `0.660` 比 **`-0.059`**, 最高記録 `0.660` は **`2,685 位 / 6,600 チーム`**, Top 33% `0.669`, Top 25% `0.684`, Bronze `0.703`, Silver `0.708`, Gold `0.759`）。
+- **事後切り分け (`0.660 → 0.601` 急落の原因特定):**
+  1. **対数確率スケールの 6〜8 倍不均衡:** `1.8 * gauss_comb` のログ確率標準偏差が **`12.145`**（平均 Top1-2 差 `3.247`）に達していた一方、既存 7 バックボーン `neu15` は `std=2.097`、StyleGram `0.35*SG1+0.35*SG2` は `std=0.321`、`1.15*glm_ll` は `std=1.486` であった。その結果、`W_GAUSS=1.8` が既存 7 モデル（OpenPool 99k 学習済み）と `GLM-5.3/Flash` 補正を完全に圧倒・上書きした。
+  2. **Singleton 精度の弱さ＆`train.csv` 共分散過適合:** `gauss_head` 単体の Singleton 精度は **`0.48676`**（`Llama_S1 0.48456` / 未調整 `Q8_Base 0.40969`）と弱く、テスト分布シフトや不完全クラスタ下では `train.csv` 2,699 行・`d=256` の共分散射影が汎化しにくい。上位解法（`0.696`）でも `gauss` 比重は全体の約 8% 程度に抑えられ、主軸はあくまで `Qwen3-14B / 8B / Llama3-8B` 等の LoRA モデル群が担っている。
+  3. **`Cluster Sinkhorn` 同時無効化:** `W_GAUSS=1.8` と同時に `Cluster Sinkhorn` (`0.85→0.00`) も一度に変更したため、次実験は要素を分離して検証する。
+- **次の一手:**
+  - **Exp #017a (安全スケール修正 ＆ 切り分け):** `d=128` 縮小＋`gauss_lp` の分散を `neu15` と揃えた上で比重を **10〜15% (`W_GAUSS ≈ 0.15〜0.25`)** に制限（`Cluster Sinkhorn` 有無を 1 変数ずつ検証）。
+  - **Exp #017b (A100 大型バックボーン):** Colab A100 空き枠を活用し、[exp015_colab_a100_qwen3_14b.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/exp015_colab_a100_qwen3_14b.py) で `Qwen3-14B-Base (27L)` を学習してニューラル本体（OpenPool 事前適応済み主軸）を底上げする。
 
 ---
 
