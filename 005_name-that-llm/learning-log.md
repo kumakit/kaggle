@@ -11,6 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#017b** | **`Qwen3-14B-Base (27L)` 8層読み出し (`[3,6,9,12,16,20,24,27]`) LoRA (`Colab A100 bf16`, Stage1 `43.2k×1ep` + Stage2 5-Fold)** | 単体 **`0.57644`** (S1 Zero-Shot `0.52455`) ／ 8-Backbone ブレンド **`0.73054`** (Nested-CV **`0.73092`**, vs Exp #015 `0.73202` 比 `-0.00111`) | *(未提出: CV未更新のため保留)* | - | A100 完走 (`14.64 CU` 消費, `max_vram=23.09GB`, `nobuyukikumagai/name-that-llm-exp017b-qwen3-14b-lora` 保存)。vs `Q3-8B` 相関 `0.8742`。Stage 1 が `1ep/2400cap/MAX_LEN 384` で適応不足（vs `Q3-4B 0.61460` は `2ep/6000cap/416`）と特定 |
 | **#017a** | **7バックボーン ＋ 安全スケール Grouped-only `Gauss Head` (`d=128, W_GAUSS=0.22`, Singleton=0.0) ＋ `Qwen3-Emb-8B(0.65)` ＋ `Sinkhorn(0.65/0.35)` ＋ `GLM-5.3/Flash`** | **Nested-CV `0.74018`**（全 5/5 Fold一致選出 `(0.22, 0.65)`, vs Exp #015 `0.73203` 比 **`+0.00815`**, vs Exp #015一致率 `96.6%`） | **`0.652`** (`Ref 58676066`) | (`0.660`維持) | **負の知見 (`-0.008` vs Exp #015 `0.660`)**: Exp #016 (`0.601`) から `+0.051` 回復も `0.660` を下回る。Nested-CV `+0.00815` と LB 符号が逆転しており、`train.csv` 共分散ヘッド (`Gauss`) のテスト分布シフト不適合、または `Qwen3-Emb(0.65)`＋`c_sk=0.65` 変更との複合影響が疑われる |
 | **#016** | **7バックボーン ＋ `Gauss Head` (`Llama3_S1`+`Qwen3-8B_Base`, `d=256, T=3.0, w_g=1.8`) ＋ `Qwen3-Emb-8B`クラスタ (`thr=0.65`) ＋ `Global Sinkhorn(0.30)` (`c_sk=0.00`) ＋ `GLM-5.3/Flash`** | **`0.75130`** (Nested-CV **`0.75094`** / 単体Gauss: `Llama_S1` `0.62201`, `Q8_Base` `0.61014` / **Singleton単体: `0.48676`**) | **`0.601`** (`Ref 58642937`) | **`2,685 位`** / 6,600 チーム | **負の知見特定 (`-0.059`)**: `1.8 * gauss_comb` の対数確率標準偏差が **`12.145`**（7バックボーン `2.097` の約6倍、`GLM 1.15*ll` `1.486` の約8倍）に達し、既存 7 モデル＋GLM を完全に上書き。Singleton 精度 `0.48676`（`Q8_Base` `0.40969`）＆`train.csv` 共分散過適合によりテストで崩落 |
 | **#015** | **7バックボーン (`+10% Llama-3.1-8B 24L 8層読み出し`) ＋ `SGv1(0.35)`＋`SGv2(0.35)` ＋ `Family Gates(lam=0.15)` ＋ `Cluster Sinkhorn(0.85)` ＋ `GLM-5.3/Flash`** | **`0.73165`** (Val-Split **`0.73202`** / Neural `0.64350→0.64943` / `Llama3-8B`単体 `0.57164`) | **`0.660`** (`Ref 58606868`) | **`2,616 位`** / 6,544 チーム | **Exp #013/#014/#015 が 3 連続 `0.660`（プラトー確定）**。OOF `+0.00259` に対し `Cluster Sinkhorn(0.85)`・TF-IDF クラスタ中心化依存が未知テスト分布と乖離している可能性が高く、次手は **`gauss.py`（埋め込み Two-Way 共分散ヘッド）＆ `Qwen3-Embedding` クラスタリング** へ移行 |
@@ -40,6 +41,33 @@
 ---
 
 ## 実験詳細
+
+### 実験 #017b: `Qwen3-14B-Base (27L)` 8層読み出し (`Colab A100 bf16`) 学習 ＆ 8-Backbone 評価
+- **実施日:** 2026-11-22
+- **担当・実施者:** 学習者本人 ＆ Antigravity（L4 スモークテスト → Colab A100 本学習 → ローカル OOF / Nested-CV 評価）
+
+#### 1. 仮説 (Hypothesis)
+- `Qwen/Qwen3-14B-Base`（40層→先頭 27層切り詰め、`9.74B`、`hidden=5120`、`[3,6,9,12,16,20,24,27]` 8層適応読み出し）を導入すれば、`Qwen3-8B`（`0.59570`）を上回る単体主軸モデルとなり、`Gauss Head` 等に頼らず `Exp #015`（`0.660`）を超えられるはず。
+
+#### 2. 実験内容 & 結果 ([exp017b_colab_qwen3_14b.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/exp017b_colab_qwen3_14b.py), [eval_exp017b_blend.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/eval_exp017b_blend.py))
+- **L4 スモークテスト (`run-8e731f`, `0.06 CU`):** 4-bit QLoRA 切替で `max_vram=12.94GB`、`[SMOKE PASS]` 確認。
+- **Colab A100 本学習 (`run-2211c1`, `14.64 CU` 消費, `bf16` LoRA, `max_vram=23.09GB`):**
+  - Stage 1 (`43,200` 件 = `tier0_instyle=35,655`, `cap/cls=2,400`, `1 epoch`, `3029.8s`): Loss `1.6105`, Pool-Val `0.56723`, Zero-Shot `train.csv` **`0.52455`**。
+  - Stage 2 (5-Fold × 5 epochs): Fold 毎 `[0.57963, 0.58704, 0.58333, 0.56756, 0.56481]`、全体 5-Fold OOF **`0.57644`**（`Mean 0.57648 +/- 0.00876`）。
+  - 重み・OOF 保存: `nobuyukikumagai/name-that-llm-exp017b-qwen3-14b-lora` (`ready`) ＆ [oof_exp017b_qwen3_14b_lora.csv](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/data/oof_exp017b_qwen3_14b_lora.csv)。
+- **8-Backbone ブレンド & Strict 5-Fold Nested-CV (`eval_exp017b_blend.py`):**
+  - 相関 vs `Qwen3-14B-27L`: vs `Q3-8B` `0.8742`, vs `Llama3-8B` `0.8697`, vs `Q3-4B` `0.7989`, vs `MB-L` `0.7701`。
+  - Neural-Only Sweep: `0.64943 (w=0.00)` → `0.64832 (w=0.15/0.20)`（改善せず）。
+  - Full Pipeline Sweep: `0.73165 (w=0.00)` → `0.73054 (w=0.10, mix15)` / `0.72981 (w=0.15, rebal_qwen)`（`min_rec` は `0.463 → 0.473` へ微増）。
+  - Strict 5-Fold Nested-CV: Exp #015 Val-Split **`0.73202`** → Exp #017b Nested-CV **`0.73092`**（`-0.00111`、Fold 1/5 は `w_q14=0.00` を選出）。
+
+#### 3. 考察（重要発見: なぜ大型化しても単体 OOF が下がったか）
+- `Exp #007 (Qwen3-4B)`: `cap=6000 (99k件), 2 epochs, MAX_LEN=416, LR_S1=1.2e-4` → S1 Zero-Shot **`0.59571`** → S2 **`0.61460`**。
+- `Exp #009 (Qwen3-8B)`: `cap=5500 (99k件), 2 epochs, MAX_LEN=416, LR_S1=1.0e-4` → **`0.60571`**。
+- これに対し `Exp #013 (Q3-8B_v2)` は `tier0_instyle` 導入＋`cap=4200` で `0.59570` へ低下し、今回の `Exp #017b (Q3-14B-27L)` は **`cap=2400, 1 epoch, MAX_LEN=384, LR_S1=8e-5`** で Stage 1 学習量が不足（Loss `1.61` 下降途中・S1 Zero-Shot **`0.52455`**）となったため、モデル容量の大きさを活かせていない。
+- **次の一手:** 本バージョンでの提出は見送り（Exp #015 `0.660` 比で OOF 未更新のため）。次は ① **`Exp #018`: Stage 1 を `Exp #007/#009` 準拠（`cap=5500〜6000, 2 epochs, MAX_LEN=416`、もしくは `Stage 1` 追加学習）に強化して `Qwen3-14B-27L`（または異ファミリー 12B〜14B 級）を再構築**するか、② **現パイプラインの `0.660` 壁を破るための上位解法（`sanpier` 等）との根本差分分析** を行う。
+
+---
 
 ### 実験 #017a: 安全スケール Grouped-only `Gauss Head` (`d=128, w_g=0.22`) ＋ `Cluster Sinkhorn(0.65)`
 - **実施日:** 2026-11-21
