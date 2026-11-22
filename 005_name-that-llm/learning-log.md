@@ -11,6 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#018** | **8バックボーン (`0.70*Exp015 + 0.30*Qwen3-Embedding-8B Twin LoRA [Plain+Centered, alpha_c=0.35]`) ＋ `SGv1(0.35)+SGv2(0.35)` ＋ `Family Gates(0.15)` ＋ `Sinkhorn(0.85/0.35)` ＋ `GLM-5.3/Flash`** | **OOF `0.73759` / Nested-CV `0.73685`** (vs Exp #015 `0.73202` 比 **`+0.00482`** / Neural `0.64943→0.66352` / 単体 `Plain 0.61349, Cent 0.67091, Twin(0.35) 0.64425`) | *(Commit 実行待ち)* | - | A100 完走 (`32.87 CU` + L4 スモーク `0.10 CU`, `S1 Zero-Shot 0.59349`). `nobuyukikumagai/name-that-llm-exp018-qwen3-emb8b-lora` 保存・[submission_exp018.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/notebooks/submission_exp018.py) プッシュ |
 | **#017b** | **`Qwen3-14B-Base (27L)` 8層読み出し (`[3,6,9,12,16,20,24,27]`) LoRA (`Colab A100 bf16`, Stage1 `43.2k×1ep` + Stage2 5-Fold)** | 単体 **`0.57644`** (S1 Zero-Shot `0.52455`) ／ 8-Backbone ブレンド **`0.73054`** (Nested-CV **`0.73092`**, vs Exp #015 `0.73202` 比 `-0.00111`) | *(未提出: CV未更新のため保留)* | - | A100 完走 (`14.64 CU` 消費, `max_vram=23.09GB`, `nobuyukikumagai/name-that-llm-exp017b-qwen3-14b-lora` 保存)。vs `Q3-8B` 相関 `0.8742`。Stage 1 が `1ep/2400cap/MAX_LEN 384` で適応不足（vs `Q3-4B 0.61460` は `2ep/6000cap/416`）と特定 |
 | **#017a** | **7バックボーン ＋ 安全スケール Grouped-only `Gauss Head` (`d=128, W_GAUSS=0.22`, Singleton=0.0) ＋ `Qwen3-Emb-8B(0.65)` ＋ `Sinkhorn(0.65/0.35)` ＋ `GLM-5.3/Flash`** | **Nested-CV `0.74018`**（全 5/5 Fold一致選出 `(0.22, 0.65)`, vs Exp #015 `0.73203` 比 **`+0.00815`**, vs Exp #015一致率 `96.6%`） | **`0.652`** (`Ref 58676066`) | (`0.660`維持) | **負の知見 (`-0.008` vs Exp #015 `0.660`)**: Exp #016 (`0.601`) から `+0.051` 回復も `0.660` を下回る。Nested-CV `+0.00815` と LB 符号が逆転しており、`train.csv` 共分散ヘッド (`Gauss`) のテスト分布シフト不適合、または `Qwen3-Emb(0.65)`＋`c_sk=0.65` 変更との複合影響が疑われる |
 | **#016** | **7バックボーン ＋ `Gauss Head` (`Llama3_S1`+`Qwen3-8B_Base`, `d=256, T=3.0, w_g=1.8`) ＋ `Qwen3-Emb-8B`クラスタ (`thr=0.65`) ＋ `Global Sinkhorn(0.30)` (`c_sk=0.00`) ＋ `GLM-5.3/Flash`** | **`0.75130`** (Nested-CV **`0.75094`** / 単体Gauss: `Llama_S1` `0.62201`, `Q8_Base` `0.61014` / **Singleton単体: `0.48676`**) | **`0.601`** (`Ref 58642937`) | **`2,685 位`** / 6,600 チーム | **負の知見特定 (`-0.059`)**: `1.8 * gauss_comb` の対数確率標準偏差が **`12.145`**（7バックボーン `2.097` の約6倍、`GLM 1.15*ll` `1.486` の約8倍）に達し、既存 7 モデル＋GLM を完全に上書き。Singleton 精度 `0.48676`（`Q8_Base` `0.40969`）＆`train.csv` 共分散過適合によりテストで崩落 |
@@ -41,6 +42,31 @@
 ---
 
 ## 実験詳細
+
+### 実験 #018: `Qwen3-Embedding-8B` LoRA + `Prompt-Centered Twin Head`（8バックボーン統合）
+- **実施日:** 2026-11-22
+- **担当・実施者:** 学習者本人 ＆ Antigravity（L4 スモークテスト → Colab A100 本学習 → ローカル OOF / Nested-CV 評価 → Kaggle `T4 x2` 推論カーネル）
+
+#### 1. 仮説 (Hypothesis)
+- `sanpier` (`0.696`) 解法のコア構造分析から、① `Qwen/Qwen3-Embedding-8B` 本体の `Instruct:` 形式＋多層 EOS (`[3,6,9,12,18,24,30,36]`) LoRA 学習、② テスト時に `train.csv` 共分散過適合（Exp #016/017a の敗因）を起こさずエンドツーエンドでプロンプト内相対スタイルを学ぶ **`Prompt-Centered Twin Head`**、③ Stage 1 をクリーン `OpenPool v11` + `nlm_matched_clean` で `2 epochs` 大規模適応させることで、Neural 単体および 8-Backbone 統合の精度を大きく底上げできるはず。
+
+#### 2. 実験内容 & 手元検証 ([exp018_colab_qwen3_emb8b_twin.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/exp018_colab_qwen3_emb8b_twin.py), [eval_exp018_blend.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/eval_exp018_blend.py))
+- **Colab L4 スモーク (`0.10 CU`) & A100 本学習 (`run-527478`, `32.87 CU` 消費, 残 `393.42 CU`):**
+  - Stage 1 (`64,545` 行 = `matched_clean 24,443` + `OpenPool v11`, `cap/cls=3,600`, `2 epochs`): Pool-Val `0.55677 → 0.59936`, Zero-Shot `train.csv` **`0.59349`**。
+  - Stage 2 (`PromptGroupBatchSampler` による 18行グループバッチ同時学習, 5-Fold × 5 epochs):
+    - `Plain-Only OOF`: **`0.61349`** (`[0.60926, 0.59630, 0.62222, 0.62484, 0.61481]`)
+    - `Centered-Only OOF`: **`0.67091`**
+    - `Twin (65% Plain + 35% Centered) OOF`: **`0.64425`** (`[0.65000, 0.63889, 0.64259, 0.65639, 0.63333]` / `50/50`: `0.65129`)
+  - 保存先: `nobuyukikumagai/name-that-llm-exp018-qwen3-emb8b-lora` (`ready`) ＆ [oof_exp018_qwen3_emb8b_plain.csv](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/data/oof_exp018_qwen3_emb8b_plain.csv) / [oof_exp018_qwen3_emb8b_centered.csv](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/data/oof_exp018_qwen3_emb8b_centered.csv)。
+- **8-Backbone ブレンド & Strict 5-Fold Nested-CV (`eval_exp018_blend.py`):**
+  - 相関 vs `Exp #018`: vs `Q3-8B` `0.8775/0.8685`, vs `Llama3-8B` `0.8094/0.8099`, vs `Q3-4B` `0.8187/0.8193`, vs `MB-L` `0.7902/0.7903`。
+  - Neural-Only Sweep: `0.64943 (w18=0.00)` → **`0.66352`** (`w18=0.30, ac=0.35`, **`+0.01409`** / Plain単体 `0.65500`)。
+  - Full Pipeline (`Exp #015` 同一後処理 `SGv1+SGv2+Gates+c_sk=0.85+g_sk=0.35+GLM`): `0.73165` → **`0.73759`** (`w18=0.30, ac=0.35`, **`+0.00594`**, `agree15=0.937`, `claude-fable-5 +0.027`, `claude-sonnet-5 +0.027`, `gpt-5.6-luna +0.033`)。
+  - Strict 5-Fold Nested-CV: `Exp #015` Val-Split `0.73202` → **`0.73685`** (`+0.00482`, `[(0.3,0.2),(0.3,0.2),(0.3,0.35),(0.3,0.45),(0.25,0.35)]` / Plain-Only でも `0.73573`, `+0.00371`)。
+- **推論カーネル ([submission_exp018.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/notebooks/submission_exp018.py)):**
+  - AST 単体テスト（クラスタ中心化・シングルトン `Plain` フォールバック）および `py_compile` 合格後、`nobuyukikumagai/name-that-llm-exp018-full-ensemble`（v1）へプッシュ。
+
+---
 
 ### 実験 #017b: `Qwen3-14B-Base (27L)` 8層読み出し (`Colab A100 bf16`) 学習 ＆ 8-Backbone 評価
 - **実施日:** 2026-11-22

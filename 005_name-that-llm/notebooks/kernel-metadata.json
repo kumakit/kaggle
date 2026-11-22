@@ -1,7 +1,7 @@
 {
-  "id": "nobuyukikumagai/name-that-llm-exp017-full-ensemble",
-  "title": "name that llm exp017 full ensemble",
-  "code_file": "submission_exp017.py",
+  "id": "nobuyukikumagai/name-that-llm-exp018-full-ensemble",
+  "title": "name that llm exp018 full ensemble",
+  "code_file": "submission_exp018.py",
   "language": "python",
   "kernel_type": "script",
   "is_private": "true",
@@ -9,7 +9,7 @@
   "enable_tpu": "false",
   "enable_internet": "false",
   "dataset_sources": [
-    "nobuyukikumagai/name-that-llm-exp016-gauss-assets",
+    "nobuyukikumagai/name-that-llm-exp018-qwen3-emb8b-lora",
     "nobuyukikumagai/name-that-llm-exp015-llama3-8b-lora",
     "nobuyukikumagai/name-that-llm-exp013-qwen3-8b-lora",
     "nobuyukikumagai/name-that-llm-exp013-stylegram-v2",
