@@ -11,6 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV Balanced Acc) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#019** | **9バックボーン (`0.70*Exp018 + 0.30*Qwen3-14B-27L Twin LoRA [Plain+Centered, alpha_c=0.35]`) ＋ `SGv1(0.35)+SGv2(0.35)` ＋ `Family Gates(0.15)` ＋ `Sinkhorn(0.85/0.35)` ＋ `GLM-5.3/Flash`** | **OOF `0.74945` / Nested-CV `0.75019`** (vs Exp #018 `0.73796` 比 **`+0.01223`**, 全 5/5 Fold が `w19=0.30` を選出 / Neural `0.66352→0.67798` / 単体 `Plain 0.61387, Cent 0.67350, Twin(0.35) 0.64499`) | *(Commit 実行待ち)* | - | A100 完走 (`29.17 CU`, S1 Zero-Shot `0.58197`). `nobuyukikumagai/name-that-llm-exp019-qwen3-14b-twin` 保存・[submission_exp019.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/notebooks/submission_exp019.py) プッシュ |
 | **#018** | **8バックボーン (`0.70*Exp015 + 0.30*Qwen3-Embedding-8B Twin LoRA [Plain+Centered, alpha_c=0.35]`) ＋ `SGv1(0.35)+SGv2(0.35)` ＋ `Family Gates(0.15)` ＋ `Sinkhorn(0.85/0.35)` ＋ `GLM-5.3/Flash`** | **OOF `0.73759` / Nested-CV `0.73685`** (vs Exp #015 `0.73202` 比 **`+0.00482`** / Neural `0.64943→0.66352` / 単体 `Plain 0.61349, Cent 0.67091, Twin(0.35) 0.64425`) | **`0.668`** (`Ref 58749439`) | **自己ベスト大幅更新！** (`0.660`壁突破) | **`+0.008` 更新（Exp #013/#014/#015 の 3 連続 `0.660` プラトーを突破）**。A100 完走 (`32.87 CU` + L4 スモーク `0.10 CU`, `S1 Zero-Shot 0.59349`)。`Qwen3-Emb-8B` + `Prompt-Centered Twin Head` の有効性を本番 LB で実証 |
 | **#017b** | **`Qwen3-14B-Base (27L)` 8層読み出し (`[3,6,9,12,16,20,24,27]`) LoRA (`Colab A100 bf16`, Stage1 `43.2k×1ep` + Stage2 5-Fold)** | 単体 **`0.57644`** (S1 Zero-Shot `0.52455`) ／ 8-Backbone ブレンド **`0.73054`** (Nested-CV **`0.73092`**, vs Exp #015 `0.73202` 比 `-0.00111`) | *(未提出: CV未更新のため保留)* | - | A100 完走 (`14.64 CU` 消費, `max_vram=23.09GB`, `nobuyukikumagai/name-that-llm-exp017b-qwen3-14b-lora` 保存)。vs `Q3-8B` 相関 `0.8742`。Stage 1 が `1ep/2400cap/MAX_LEN 384` で適応不足（vs `Q3-4B 0.61460` は `2ep/6000cap/416`）と特定 |
 | **#017a** | **7バックボーン ＋ 安全スケール Grouped-only `Gauss Head` (`d=128, W_GAUSS=0.22`, Singleton=0.0) ＋ `Qwen3-Emb-8B(0.65)` ＋ `Sinkhorn(0.65/0.35)` ＋ `GLM-5.3/Flash`** | **Nested-CV `0.74018`**（全 5/5 Fold一致選出 `(0.22, 0.65)`, vs Exp #015 `0.73203` 比 **`+0.00815`**, vs Exp #015一致率 `96.6%`） | **`0.652`** (`Ref 58676066`) | (`0.660`維持) | **負の知見 (`-0.008` vs Exp #015 `0.660`)**: Exp #016 (`0.601`) から `+0.051` 回復も `0.660` を下回る。Nested-CV `+0.00815` と LB 符号が逆転しており、`train.csv` 共分散ヘッド (`Gauss`) のテスト分布シフト不適合、または `Qwen3-Emb(0.65)`＋`c_sk=0.65` 変更との複合影響が疑われる |
@@ -42,6 +43,30 @@
 ---
 
 ## 実験詳細
+
+### 実験 #019: `Qwen3-14B-Base (27L)` ＋ `OpenPool v11 / Matched 2ep` ＋ `Twin Centered Head`（9バックボーン統合）
+- **実施日:** 2026-11-23
+- **担当・実施者:** 学習者本人 ＆ Antigravity（L4 スモークテスト → Colab A100 本学習 → ローカル OOF / Nested-CV 評価 → Kaggle `T4 x2` 推論カーネル）
+
+#### 1. 仮説 (Hypothesis)
+- Exp #018（Public LB `0.668`）で証明された勝ちパターン（`OpenPool v11 + matched_clean` 2 epochs による十分な Stage 1 適応 ＋ `PromptGroupBatchSampler` による `Plain & Centered Twin Head` 同時学習）を、`Exp #017b` で Stage 1 不足だった `Qwen3-14B-Base (27L)` へ適用すれば、9-Backbone 主軸としてさらなる大幅更新が見込めるはず。
+
+#### 2. 実験内容 & 手元検証 ([exp019_colab_qwen3_14b_twin.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/exp019_colab_qwen3_14b_twin.py), [eval_exp019_blend.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/src/eval_exp019_blend.py))
+- **Colab L4 スモーク (`0.12 CU`) & A100 本学習 (`run-24f88c`, `29.17 CU` 消費, 残 `364.13 CU`):**
+  - Stage 1 (`57,600` 行 = `matched_clean 24,019` + `OpenPool v11`, `cap/cls=3,200`, `2 epochs`): Pool-Val `0.55045 → 0.59631`, Zero-Shot `train.csv` **`0.58197`**（Exp #017b `0.52455` 比 `+0.05742`）。
+  - Stage 2 (`PromptGroupBatchSampler`, 5-Fold × 5 epochs):
+    - `Plain-Only OOF`: **`0.61387`**
+    - `Centered-Only OOF`: **`0.67350`**（過去最高単体）
+    - `Twin (65% Plain + 35% Centered) OOF`: **`0.64499`** (`[0.65926, 0.65741, 0.65556, 0.62490, 0.62778]` / `50/50`: `0.65461`)
+  - 保存先: `nobuyukikumagai/name-that-llm-exp019-qwen3-14b-twin` (`ready`) ＆ [oof_exp019_qwen3_14b_plain.csv](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/data/oof_exp019_qwen3_14b_plain.csv) / [oof_exp019_qwen3_14b_centered.csv](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/data/oof_exp019_qwen3_14b_centered.csv)。
+- **9-Backbone ブレンド & Strict 5-Fold Nested-CV (`eval_exp019_blend.py`):**
+  - Neural-Only Sweep: `0.66352 (Exp #018)` → **`0.67798`**（`+0.01446`）。
+  - Full Pipeline (`w19=0.30, ac19=0.35`, `Exp #018` 同一後処理): `0.73759` → **`0.74945`**（**`+0.01186`**, `agree18=0.936`）。
+  - Strict 5-Fold Nested-CV: `Exp #018` Val-Split `0.73796` → **`0.75019`**（**`+0.01223`**, 全 5/5 Fold が `w19=0.30` を満場一致選出 `[(0.3,0.35),(0.3,0.45),(0.3,0.25),(0.3,0.45),(0.3,0.45)]`）。
+- **推論カーネル ([submission_exp019.py](file:///C:/Users/kumat/dev/kaggle/005_name-that-llm/notebooks/submission_exp019.py)):**
+  - `py_compile` 合格後、`nobuyukikumagai/name-that-llm-exp019-full-ensemble`（v1）へプッシュ。
+
+---
 
 ### 実験 #018: `Qwen3-Embedding-8B` LoRA + `Prompt-Centered Twin Head`（8バックボーン統合）
 - **実施日:** 2026-11-22
