@@ -1,0 +1,59 @@
+{
+  "id": "alexchilton/credit-card-fraud-lb-0-9550-shallow-tree-stack",
+  "id_no": 142021372,
+  "title": "Credit Card Fraud | LB 0.9550 | Shallow-Tree Stack",
+  "code_file": "credit-card-fraud-lb-0-9550-shallow-tree-stack.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "keywords": [
+    "ensembling",
+    "exploratory data analysis",
+    "gpu"
+  ],
+  "dataset_sources": [
+    "uditjain13/credit-card-fraud-detection-2026",
+    "queyrusi/fraud-shared-digit-cnn-weights",
+    "sadamtorres/ps-s6e11-tabpfn-gbdt-oof-test-pairs",
+    "goodpjw2008/s6e11-compact-lm-seed7",
+    "wenimohamed/s6e11-diverse-bpe-realmlp-tabm-oof-pack",
+    "goodpjw2008/s6e11-fraud-series-artifacts",
+    "alexchilton/s6e11-frozen-public-banks",
+    "masayakawamata/s6e11-gpt2-target-first-oof",
+    "alexchilton/s6e11-oof-predictions",
+    "goodpjw2008/s6e11-oof-bank",
+    "busyaprime/s6e11-33-own-members",
+    "malyshevdanil/s6e11-pooled-stack-v9",
+    "masayakawamata/s6e11-public-stack-v10-outputs",
+    "amanatar/s6e11-rank1-q17-meta-bundle",
+    "amanatar/s6e11-strike10-podium-apex-095340",
+    "moranzavdi/s6e11-strike9-lb-095330",
+    "masayakawamata/s6e11-tabpack-cpu-starter-predictions",
+    "goodpjw2008/s6e11-target-first-gpt2-seed-2026",
+    "megayak/s6e11-target-first-lm",
+    "wguesdon/s6e11-tree-ensemble-predictions"
+  ],
+  "kernel_sources": [
+    "ektarr/lb-0-95121-realmlp-stacking",
+    "lazyyeou/s6e11-digit-trie-te-joint-glm-nested-stack",
+    "nilanjansaha123/96-key-digit-trie-gpt-2-full-refit-hybrid",
+    "sameershaikh27/s6e11-fraud-glm-boost-on-ten-folds",
+    "sameershaikh27/s6e11-fraud-digit-sequence-cnn-member",
+    "goodpjw2008/s6e11-part-12-wide-stack-2nd-lm-lb-0-95298",
+    "yekenot/ps-s6-e11-realmlp-pytorch",
+    "yekenot/ps-s6-e11-realmlp-pytabkit",
+    "davutkursun/s6e11-one-xgboost-no-public-files-lb-0-9514",
+    "davutkursun/s6e11-tfms-on-2xt4-do-they-add-to-the-stack",
+    "megayak/s6e11-per-value-digit-te-shallow-tree-stack",
+    "goodpjw2008/s6e11-board-model-realmlp-lb-0-95569"
+  ],
+  "competition_sources": [
+    "playground-series-s6e11"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:9a6bcfda6d03b2cd9aa347ee8c1bae62043328ed0f4afe9bda014e4f8bbf9435",
+  "machine_shape": "NvidiaTeslaT4"
+}

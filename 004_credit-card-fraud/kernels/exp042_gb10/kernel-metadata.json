@@ -1,0 +1,17 @@
+{
+  "id": "nobuyukikumagai/s6e11-exp042-glm-boost-10fold-refit",
+  "title": "s6e11 exp042 glm boost 10fold refit",
+  "code_file": "exp042_glm_boost_10fold_refit.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "false",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": [],
+  "competition_sources": [
+    "playground-series-s6e11"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}

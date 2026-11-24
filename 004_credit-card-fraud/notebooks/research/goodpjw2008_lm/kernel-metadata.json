@@ -1,0 +1,28 @@
+{
+  "id": "goodpjw2008/s6e11-lm-ladder-ladder-meets-stack-lb-0-95432",
+  "id_no": 144313003,
+  "title": "S6E11 LM Ladder | Ladder Meets Stack | LB 0.95432",
+  "code_file": "s6e11-lm-ladder-ladder-meets-stack-lb-0-95432.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [
+    "goodpjw2008/s6e11-compact-lm-seed7",
+    "goodpjw2008/s6e11-fraud-series-artifacts",
+    "goodpjw2008/s6e11-oof-bank",
+    "asteriospanoras/s6e11-public-board-files",
+    "amanatar/s6e11-rank1-q17-meta-bundle",
+    "goodpjw2008/s6e11-target-first-gpt2-seed-2026"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "playground-series-s6e11"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-images/python@sha256:0717e81990be591f8c5f98f033d29ab23e9ffde057e5b3a6bd4371f93969e962",
+  "machine_shape": "None"
+}

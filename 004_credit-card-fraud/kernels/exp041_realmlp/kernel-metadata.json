@@ -1,0 +1,17 @@
+{
+  "id": "nobuyukikumagai/s6e11-exp041-digit-te-realmlp-refit",
+  "title": "s6e11 exp041 digit te realmlp refit",
+  "code_file": "exp041_realmlp.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [
+    "playground-series-s6e11"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}

@@ -44,7 +44,7 @@ flowchart TD
 | 枠 | 提出ファイル | 手元CV | Public LB | 役割・選定根拠 |
 |---|---|---|---|---|
 | **枠 1（攻め枠）** | [`submission_exp033.csv`](file:///C:/Users/kumat/dev/kaggle/004_credit-card-fraud/data/submission_exp033.csv)<br>*(または `exp039.csv`)* | - | **`0.95349`**<br>(**14 位 / Top 0.94%**) | **ゴールドメダル獲得の本命**。<br>最新ラダー（v17）の外挿ノイズを、自力の純粋決定木（相関 0.974）で外科手術的に除去。3 つの近傍比率すべてで 0.95349 を叩き出す「平坦な最適解プラトー」を形成。 |
-| **枠 2（守り枠）** | [`submission_exp027.csv`](file:///C:/Users/kumat/dev/kaggle/004_credit-card-fraud/data/submission_exp027.csv) | **`0.95120`** | **`0.95212`** | **シェイクダウン完全防止枠**。<br>外挿を一切排除し、GPT-2 を含む 78 モデル公開プールと自力 3 大 GBDT を Standardized Rank-Logit で調和。真の OOF に裏打ちされた絶対的安定性を誇る。 |
+| **枠 2（守り枠・11/24刷新）** | [`submission_exp044.csv`](file:///C:/Users/kumat/dev/kaggle/004_credit-card-fraud/data/submission_exp044.csv) | **`0.952644`** *(Nested `0.95263`)* | **`0.95309`** | **シェイクダウン完全防止枠（最新刷新版）**。<br>`WideLM` + 10-Fold GLM-Boost (`Sameer10F` + 自力 `Exp042`) + 4-epoch `RealMLP` を非負凸結合。外挿・プロービング一切なしで旧守り枠（`Exp040`: CV `0.95128` / LB `0.95177`）から大幅更新。 |
 
 ---
 
@@ -115,7 +115,10 @@ xychart-beta
 | **Phase 17** | **#034** | 4大アンカー完全ブレンド（95% Ladder + 2.5% Exp019 + 1.5% Exp022 + 1% Exp023） | - | **`0.95349`** | **`14 位`（2連続で再現）** |
 | **Phase 18** | **#036** | Colab L4 GPU CatBoost GPU 対称木（Oblivious Trees） | 0.94942 | - | 直交パーツ完成（相関 0.964） |
 | **Phase 18** | **#039** | Ladder v17 Apex比率ブレンド（95% Ladder + 3% Exp019 + 2% Exp022） | - | **`0.95349`** | **`14 位`（3連続で再現・平坦プラトー実証）** |
-| **Phase 18** | **#040** | 3大骨格ピュアCV堅牢アンサンブル（70万行 OOF 非負最適化） | **`0.951280`** | 0.95177 | **手元 CV 過去最高記録樹立！** |
+| **Phase 18** | **#040** | 3大骨格ピュアCV堅牢アンサンブル（70万行 OOF 非負最適化） | `0.951280` | 0.95177 | 旧守り枠 |
+| **Phase 19** | **#042** | Kaggle CPU 10-Fold GLM-Boosted LightGBM + Full-Data Refit | **`0.951449`** | - | **自力単体過去最高（CU消費 0）** |
+| **Phase 19** | **#043** | Pure Nested-CV 凸結合（WideLM + Sameer10F + RealMLP2） | `0.952603` | **`0.95299`** | CV↔LB 完全連動を実証 |
+| **Phase 19** | **#044** | **Pure Nested-CV グランドアンサンブル（新・守り枠）** | **`0.952644`** *(Nested `0.95263`)* | **`0.95309`** | **10/10 Fold で WideLM に勝利！** |
 
 ---
 
@@ -131,9 +134,9 @@ uv sync
 uv run python 004_credit-card-fraud/src/exp033_ladder_sweetspot_blend.py
 # -> 004_credit-card-fraud/data/submission_exp033.csv が生成されます
 
-# 3. 守り枠（枠2: CV 0.95120 / LB 0.95212）の生成
-uv run python 004_credit-card-fraud/src/exp027_standardized_rank_logit_ensemble.py
-# -> 004_credit-card-fraud/data/submission_exp027.csv が生成されます
+# 3. 守り枠（枠2: Nested-CV 0.95263 / Full OOF 0.952644 / LB 0.95309）の生成
+uv run python 004_credit-card-fraud/src/build_exp044_final_pure_cv.py
+# -> 004_credit-card-fraud/data/submission_exp044.csv が生成されます
 ```
 
 ---
