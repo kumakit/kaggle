@@ -216,12 +216,13 @@ def build_base_features(tr: pd.DataFrame, te: pd.DataFrame):
         new_cats.append(col)
         crosses.append(col)
 
-    for col in new_cats:
-        tr[col] = tr[col].astype("category")
-        te[col] = te[col].astype("category")
     for col in cat:
-        tr[col] = tr[col].astype("category")
-        te[col] = te[col].astype("category")
+        tr[col], te[col] = coded(tr[col].astype(str), te[col].astype(str))
+        tr[col] = tr[col].astype("int32")
+        te[col] = te[col].astype("int32")
+    for col in new_cats:
+        tr[col] = tr[col].astype("int32")
+        te[col] = te[col].astype("int32")
 
     all_cats = cat + new_cats
     te_src = crosses + ["hours_since_last_txn"]

@@ -11,6 +11,9 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV AUC) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#045** | **Frontier Micro-Diversity Blend (98.5% Frontier 0.95569 + 1.0% Exp043 + 0.5% Exp041 RealMLP)** | - | **`0.95569`** | **`71 位` / 3,012 チーム (Top 2.36% / 392人抜き🚀)** | **新・攻め枠確定！** 最新公開最上位 `0.95569` に Pure CV と自力 RealMLP を 1.5% 注入し、463位から71位へ急浮上 |
+| **#044b** | **Frontier Diversity Blend (96.5% Frontier 0.95569 + 2.0% Exp043 + 1.0% Exp042 + 0.5% Exp041)** | - | `0.95568` | `111 位` / 3,012 チーム (352人抜き) | 3.5%注入で `0.95568`（463位→111位）。1.5%注入（Exp045）がより最適と判明 |
+| **#041** | **Kaggle GPU Digit-TE Enhanced RealMLP (`pytabkit`) + Full-Data Refit** | **`0.950035`** *(5-Fold OOF)* | *(Exp043/045へ組込)* | - | **自力 Deep Tabular NN 完成！** 36桁キーTE＋In-Fold TE＋Full-Data Refit。WideLM と相関 `0.9746` で `+0.143 pts` 貢献 |
 | **#044** | **Pure Nested-CV グランドアンサンブル (82.0% WideLM + 10.3% Sameer10F + 7.4% RealMLP4 + 0.3% Exp042)** | **`0.952628 / 0.952637`** *(2-Seed Nested / Full `0.952644`)* | **`0.95309`** | 守り枠新記録 | **10/10 Fold で WideLM に勝利！** プロービング・外挿ゼロの非負凸結合で旧守り枠 `Exp040` (`0.95177`) 比 `+0.00132` 大躍進！ |
 | **#043** | **Pure Nested-CV 凸結合アンサンブル (79.1% WideLM + 11.1% Sameer10F + 9.8% RealMLP2)** | **`0.952601 / 0.952599`** *(2-Seed Nested / Full `0.952603`)* | **`0.95299`** | - | WideLM 基盤 (`0.952565`) に 10-Fold GLM-Boost と RealMLP を非負融合。CV `+0.00132` に対し LB `+0.00122` で完全連動 |
 | **#042** | **Kaggle CPU 10-Fold GLM-Boosted LightGBM + 7ペアキー + Full-Data Refit (2シード)** | **`0.951449`** *(10-Fold OOF)* | *(Exp044へ組込)* | 自力単体最高 | **自力単体モデル過去最高樹立！** (`Exp023` `0.951165` 比 `+0.000284`)。Colab CU 消費 0（Kaggle 無料 CPU 60.4分） |
@@ -59,6 +62,17 @@
 ---
 
 ## 実験詳細
+
+### 実験 #045: Frontier Micro-Diversity Blend (98.5% Frontier 0.95569 + 1.0% Exp043 + 0.5% Exp041 RealMLP)
+- **実施日:** 2026-11-25
+- **手法:** Standardized Rank-Logit 空間で最新公開最上位 (`goodpjw2008` LB `0.95569`) に Pure Nested-CV (`Exp #043`, 2-Seed Outer Nested-CV `0.952597` / LB `0.95299`) 1.0% ＋ 自力 RealMLP (`Exp #041` Refit) 0.5% を微細注入。
+- **結果:** Public LB **`0.95569`**、公式順位 **`71 位` / 3,012 チーム中（Top 2.36%）** に急浮上（463 位から **392 人抜き**）。
+- **位置づけ:** 大会終盤における **枠 1（攻め枠）** の新候補。
+
+### 実験 #041: Kaggle GPU Digit-TE Enhanced RealMLP (`pytabkit`) + Full-Data Refit
+- **実施日:** 2026-11-25
+- **手法:** Kaggle 無料 GPU カーネル (`nobuyukikumagai/s6e11-exp041-digit-te-realmlp-refit`) 上で `pytabkit` の `RealMLP_TD_Classifier`（`n_ens=8, n_epochs=2`）を 36 桁キー m-estimate TE ロジット + 整数/小数カテゴリ + クロス特徴で 5-Fold 学習＋Full-Data Refit。
+- **結果:** 単体 OOF AUC **`0.950035`**。Wide LM Stack との相関 `0.9746` で `+0.143 pts` の直交貢献を達成し、`Exp #043` (`0.952597`) および `Exp #045` (`0.95569`) に組み込み完了。
 
 ### 実験 #044: Pure Nested-CV グランドアンサンブル (82.0% WideLM + 10.3% Sameer10F + 7.4% RealMLP4 + 0.3% Exp042)
 - **実施日:** 2026-11-24
