@@ -20,7 +20,8 @@ AI エージェント（Antigravity、各種 LLM エージェント）は、本�
    - 固定乱数シードの設定と複数シード平均（Seed Averaging）を標準とする。
    - **API キー等の機密情報（`KAGGLE_KEY` 等）をスクリプト内にハードコードしない。** 認証には `~/.kaggle/kaggle.json`、環境変数、`.env`、または Colab Secrets を使用する。
 3. **コンピュートリソースの最適配分（N100 保護 ＆ CU 温存）:**
-   - **ローカル (`uv run` / Intel N100 ミニPC: 4C4T, RAM 16GB, GPUなし):** 軽量 EDA、小規模モデル、OOF ブレンド／Nested-CV 検証、バンドル構築に限定する（詳細は第5章の N100 保護規定を参照）。
+   - **ローカル (`uv run` / Intel N100 ミニPC: 4C4T, RAM 16GB, GPUなし):** 通常の標準実行環境。軽量 EDA、小規模モデル、OOF ブレンド／Nested-CV 検証、バンドル構築に限定する（詳細は第5章の N100 保護規定を参照）。
+   - **OCI A1 サーバー (`ssh oci` / ARM64 `aarch64`, 4 OCPU, RAM 23Gi, GPUなし):** N100 の制限（RAM 8GB 超・10 分超・`n_jobs=2`）を超える重い **CPU 処理**（大規模前処理、特徴量生成、Optuna、CPU 版 GBDT の多シード CV、長時間 OOF 最適化等）を状況に応じて自動でオフロードする（`n_jobs=4` 可）。GPU 不要の重い処理を OCI へ逃がすことで、N100 を保護しつつ Colab CU を温存する。
    - **Kaggle Kernels (`T4 x2` / 週 30 時間無料 GPU 枠):** Code Competition のオフライン統合推論・特徴抽出に加え、DeBERTa 系や 1.7B〜4B 級モデルの中規模学習にも積極的に活用し、Colab CU を温存する。
    - **Google Colab L4 GPU (24GB VRAM / 標準主力):** 大規模 GBDT（マルチシード）、Tabular / 時系列 NN、中規模 Encoder / Decoder（ModernBERT, DeBERTa-v3-large, Qwen3-1.7B/4B）、および 4-bit QLoRA による 8B〜14B 級モデル学習。
    - **Google Colab A100 GPU (40GB VRAM / 大型モデル用):** 大型 LLM（8B〜14B 級以上）の高精度 LoRA 学習や長コンテキスト・大容量バッチ学習（※確保難時は速やかに L4 4-bit QLoRA へフォールバック）。
@@ -39,7 +40,7 @@ AI エージェント（Antigravity、各種 LLM エージェント）は、本�
 
 | 区分 | 対象アクション | 運用ルール |
 |---|---|---|
-| **承認不要**<br>*(自律実行可)* | ・ディスカッション・上位解法調査、データ確認<br>・ローカル軽量処理（RAM 8GB 以下・10 分以内の特徴量作成、OOF ブレンド、Nested-CV 検証、バンドル構築）<br>・短時間スモークテスト（Colab T4 または L4 で 10 分以内 `--timeout 600`）<br>・Kaggle 無料枠（Kernel `T4 x2` / CPU）での推論検証・特徴抽出・中規模学習<br>・`learning-log.md` 更新、GitHub Issue 追記、Git コミット | ユーザーの確認を待たず自律的に実行し、完了後に冒頭サマリー形式で報告する。 |
+| **承認不要**<br>*(自律実行可)* | ・ディスカッション・上位解法調査、データ確認<br>・ローカル軽量処理（RAM 8GB 以下・10 分以内の特徴量作成、OOF ブレンド、Nested-CV 検証、バンドル構築）<br>・OCI A1 (`ssh oci`) への重い CPU 処理の自動オフロード（大規模前処理、CPU 版 GBDT、Optuna、長時間 OOF 検証等）<br>・短時間スモークテスト（Colab T4 または L4 で 10 分以内 `--timeout 600`）<br>・Kaggle 無料枠（Kernel `T4 x2` / CPU）での推論検証・特徴抽出・中規模学習<br>・`learning-log.md` 更新、GitHub Issue 追記、Git コミット | ユーザーの確認を待たず自律的に実行し、完了後に冒頭サマリー形式で報告する。 |
 | **事前承認必須**<br>*(実行前に確認)* | ・Colab 本学習（想定 **1 時間超**、または **A100 GPU** を使用するジョブ）<br>・残 CU が **`50` 未満**の状態での有料 GPU 起動<br>・当日の残り提出枠が **1 枠** の状態での Kaggle 本番提出 | 実行前に「想定所要時間・推定消費 CU・期待効果（または推論予算）」を提示し、承認を得てから投入する。 |
 
 ---
@@ -192,8 +193,10 @@ colab stop -s <session-name>
 ローカル環境は **常時稼働の省電力ミニPC（Intel N100 / 4C4T / RAM 16GB / GPUなし）** です。OOM（メモリ枯渇）や CPU 飽和によるシステムハングアップ・リモート接続断を防ぐため、以下の制限を厳守してください。
 - **並列数の上限 (`n_jobs=2`):**
   - ローカルでの並列処理（scikit-learn, LightGBM, joblib 等）は **`n_jobs=2`（または `num_threads=2`）を上限**とする。全コアを占有する **`n_jobs=-1` はローカルでは使用禁止**とする。
-- **メモリ 8GB・実行 10 分の上限（クラウドへのオフロード）:**
-  - **推定メモリ消費 8GB 超**、または **実行時間 10 分超** が見込まれる重い前処理・特徴量抽出・モデル学習はローカルで実行せず、Google Colab または Kaggle Kernel へ逃がす。
+- **メモリ 8GB・実行 10 分の上限（自動オフロード判断）:**
+  - **推定メモリ消費 8GB 超**、または **実行時間 10 分超** が見込まれる処理はローカル（N100）で実行せず、タスクの性質に応じて自動で以下にオフロードする：
+    - **GPU 不要の重い CPU 処理 → OCI A1 (`ssh oci`):** 作業ディレクトリは `~/dev/kaggle`、大容量データ・中間成果物は `/mnt/data/kaggle` を使用する（非対話 SSH 実行時は `export PATH="$HOME/.local/bin:$PATH"` を付与し、`uv run` で実行。`n_jobs=4` まで可、ディスク空き容量に留意）。
+    - **GPU が必要な学習・推論 → Kaggle Kernel または Google Colab:** NN / LLM 学習、GPU 版 GBDT 等は第3・4章に従い投入する。
 - **省メモリデータ処理:**
   - 大規模データの前処理は Pandas の一括読み込みを避け、**Polars（`scan_csv` / `scan_parquet` 等の遅延評価・ストリーミング処理）**、適切な型縮小（`float32` / `int32`）、および不要オブジェクト削除＋明示的な `gc.collect()` を優先する。
 
