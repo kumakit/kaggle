@@ -1,0 +1,17 @@
+{
+  "id": "nobuyukikumagai/s6e11-exp047-realmlp-2seeds",
+  "title": "s6e11 exp047 realmlp 2seeds",
+  "code_file": "exp047_realmlp_2seeds.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [
+    "playground-series-s6e11"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}

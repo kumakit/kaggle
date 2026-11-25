@@ -11,6 +11,9 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV AUC) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#048** | **Pure Nested-CV Fortress (80% 非負Direct-AUC Convex + 20% L2-LogReg / Exp041+042+046+047統合)** | **`0.952606`** *(MetaBlend)*<br>`0.952594` *(2-Seed Nested)* | **`0.95297`** | - | **守り枠・分散最小要塞完成！** 10F XGBoost + 10F LGBM + 3シード RealMLP を完全非負統合 |
+| **#047** | **Kaggle GPU Digit-TE RealMLP 追加2シード (`2026, 777`) + Full-Data Refit** | `0.950177` *(Exp041+047 3-Seed)* | *(Exp048へ組込)* | - | 1-seed `0.950035` → 3-seed `0.950177` (`+0.000142`向上)。Colab CU 消費 0 |
+| **#046** | **Kaggle GPU 10-Fold GLM-Boosted XGBoost Depth 2 + Full-Data Refit (2シード)** | **`0.951406`** *(10-Fold OOF)* | *(Exp048へ組込)* | - | 5-Fold `Exp023` (`0.951165`) 比 `+0.000241` 向上。WideLM へ `+0.128 pts` 貢献 |
 | **#045** | **Frontier Micro-Diversity Blend (98.5% Frontier 0.95569 + 1.0% Exp043 + 0.5% Exp041 RealMLP)** | - | **`0.95569`** | **`71 位` / 3,012 チーム (Top 2.36% / 392人抜き🚀)** | **新・攻め枠確定！** 最新公開最上位 `0.95569` に Pure CV と自力 RealMLP を 1.5% 注入し、463位から71位へ急浮上 |
 | **#044b** | **Frontier Diversity Blend (96.5% Frontier 0.95569 + 2.0% Exp043 + 1.0% Exp042 + 0.5% Exp041)** | - | `0.95568` | `111 位` / 3,012 チーム (352人抜き) | 3.5%注入で `0.95568`（463位→111位）。1.5%注入（Exp045）がより最適と判明 |
 | **#041** | **Kaggle GPU Digit-TE Enhanced RealMLP (`pytabkit`) + Full-Data Refit** | **`0.950035`** *(5-Fold OOF)* | *(Exp043/045へ組込)* | - | **自力 Deep Tabular NN 完成！** 36桁キーTE＋In-Fold TE＋Full-Data Refit。WideLM と相関 `0.9746` で `+0.143 pts` 貢献 |
@@ -62,6 +65,21 @@
 ---
 
 ## 実験詳細
+
+### 実験 #048: Pure Nested-CV Fortress (80% 非負Direct-AUC Convex + 20% L2-LogReg)
+- **実施日:** 2026-11-25
+- **手法:** `Exp #046`（10F GLM-XGB）、`Exp #042`（10F GLM-LGBM）、`Exp #041 + #047`（3-Seed RealMLP）を含む精鋭7モデルを 2-Seed Outer Nested-CV (`seed=2026, 777`) 上で直接 ROC-AUC 最適化した完全非負凸結合（`0.952594` / Full `0.952605`）と、`Exp #043`（L2-LogReg `0.952597`）を 80:20 でメタ安定化融合。
+- **結果:** OOF AUC **`0.952606`**、Public LB **`0.95297`**。外挿ゼロ・完全非負軸主体の最小分散守り枠として完成。
+
+### 実験 #047: Kaggle GPU Digit-TE RealMLP 追加2シード (`2026, 777`) + Full-Data Refit
+- **実施日:** 2026-11-25
+- **手法:** `Exp #041` (`seed=42`) と同一構成で `seed=2026, 777` を Kaggle 無料 GPU で学習・Full-Data Refit し、3シード平均を生成。
+- **結果:** 3-Seed RealMLP OOF AUC **`0.950177`**（1-seed `0.950035` 比 `+0.000142`）。
+
+### 実験 #046: Kaggle GPU 10-Fold GLM-Boosted XGBoost Depth 2 + Full-Data Refit (2シード)
+- **実施日:** 2026-11-25
+- **手法:** Kaggle 無料 GPU 上で 10-Fold Stratified CV ＋ 67キー m-estimate TE ＋ GLM 初期値 (`base_margin`) ＋ XGBoost Depth 2 ＋ Full-Data Refit を 2シードで学習。
+- **結果:** 単体 OOF AUC **`0.951406`**（5-Fold `Exp #023` `0.951165` 比 `+0.000241`）。
 
 ### 実験 #045: Frontier Micro-Diversity Blend (98.5% Frontier 0.95569 + 1.0% Exp043 + 0.5% Exp041 RealMLP)
 - **実施日:** 2026-11-25
