@@ -1,0 +1,17 @@
+{
+  "id": "nobuyukikumagai/s6e11-exp049-digit-te-tabm-refit",
+  "title": "s6e11 exp049 digit te tabm refit",
+  "code_file": "exp049_tabm_refit.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [
+    "playground-series-s6e11"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}

@@ -11,6 +11,7 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV AUC) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#050** | **Kaggle GPU 10-Fold GLM-Boosted CatBoost (対称木 depth=3) + Full-Data Refit (2シード)** | **`0.951196`** *(10-Fold OOF)* | - | - | 5-Fold `Exp036` (`0.949424`) 比 **`+0.001772`** 向上！`Exp048` との相関 `0.9902` により `Exp048` は `0.952606` 維持 |
 | **#048** | **Pure Nested-CV Fortress (80% 非負Direct-AUC Convex + 20% L2-LogReg / Exp041+042+046+047統合)** | **`0.952606`** *(MetaBlend)*<br>`0.952594` *(2-Seed Nested)* | **`0.95297`** | - | **守り枠・分散最小要塞完成！** 10F XGBoost + 10F LGBM + 3シード RealMLP を完全非負統合 |
 | **#047** | **Kaggle GPU Digit-TE RealMLP 追加2シード (`2026, 777`) + Full-Data Refit** | `0.950177` *(Exp041+047 3-Seed)* | *(Exp048へ組込)* | - | 1-seed `0.950035` → 3-seed `0.950177` (`+0.000142`向上)。Colab CU 消費 0 |
 | **#046** | **Kaggle GPU 10-Fold GLM-Boosted XGBoost Depth 2 + Full-Data Refit (2シード)** | **`0.951406`** *(10-Fold OOF)* | *(Exp048へ組込)* | - | 5-Fold `Exp023` (`0.951165`) 比 `+0.000241` 向上。WideLM へ `+0.128 pts` 貢献 |
@@ -65,6 +66,11 @@
 ---
 
 ## 実験詳細
+
+### 実験 #050: Kaggle GPU 10-Fold GLM-Boosted CatBoost (対称木 depth=3) + Full-Data Refit (2シード)
+- **実施日:** 2026-11-26
+- **手法:** Kaggle 無料 GPU カーネル (`nobuyukikumagai/s6e11-exp050-glm-cat-10fold-refit`) 上で 10-Fold Stratified CV ＋ 67キー m-estimate TE ＋ GLM 初期値 (`baseline`) ＋ CatBoost GPU (`depth=3`) ＋ Full-Data Refit を 2 シードで学習。
+- **結果:** 単体 OOF AUC **`0.951196`**（5-Fold `Exp #036` `0.949424` 比 `+0.001772`）。`Exp #048` との相関 `0.990227` のため、追加ブレンドは `0.952606` 横ばい。
 
 ### 実験 #048: Pure Nested-CV Fortress (80% 非負Direct-AUC Convex + 20% L2-LogReg)
 - **実施日:** 2026-11-25
