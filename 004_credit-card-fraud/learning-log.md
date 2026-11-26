@@ -11,6 +11,8 @@
 
 | 実験 # | 手法・モデル | 手元検証スコア (5-fold CV AUC) | Kaggle本番スコア (Public LB) | 順位推移 | 備考 |
 |---|---|---|---|---|---|
+| **#051** | **Pure Nested-CV Fortress + TabM (`98.5% Exp048 + 1.5% Exp049 TabM Refit`)** | **`0.952608`** *(Nested2026: `0.952605`)* | **`0.95302`** | - | **TabM 追加で OOF +0.02 / LB +0.5 pts 向上！** 異種 NN 多様性入りの最強守り枠 |
+| **#049** | **Kaggle GPU Digit-TE Enhanced TabM (`TabM_D_Classifier`) + Full-Data Refit** | **`0.947552`** *(5-Fold OOF)* | *(Exp051へ組込)* | - | `Exp048` と相関 **`0.9609`** の超直交 BatchEnsemble NN。Colab CU 消費 0 |
 | **#050** | **Kaggle GPU 10-Fold GLM-Boosted CatBoost (対称木 depth=3) + Full-Data Refit (2シード)** | **`0.951196`** *(10-Fold OOF)* | - | - | 5-Fold `Exp036` (`0.949424`) 比 **`+0.001772`** 向上！`Exp048` との相関 `0.9902` により `Exp048` は `0.952606` 維持 |
 | **#048** | **Pure Nested-CV Fortress (80% 非負Direct-AUC Convex + 20% L2-LogReg / Exp041+042+046+047統合)** | **`0.952606`** *(MetaBlend)*<br>`0.952594` *(2-Seed Nested)* | **`0.95297`** | - | **守り枠・分散最小要塞完成！** 10F XGBoost + 10F LGBM + 3シード RealMLP を完全非負統合 |
 | **#047** | **Kaggle GPU Digit-TE RealMLP 追加2シード (`2026, 777`) + Full-Data Refit** | `0.950177` *(Exp041+047 3-Seed)* | *(Exp048へ組込)* | - | 1-seed `0.950035` → 3-seed `0.950177` (`+0.000142`向上)。Colab CU 消費 0 |
@@ -66,6 +68,16 @@
 ---
 
 ## 実験詳細
+
+### 実験 #051: Pure Nested-CV Fortress + TabM (`98.5% Exp048 + 1.5% Exp049 TabM Refit`)
+- **実施日:** 2026-11-26
+- **手法:** `Exp #048`（`0.952606`）に自力 `TabM`（`Exp #049` Full-Data Refit）を 1.5% 注入。
+- **結果:** OOF AUC **`0.952608`**（`Exp #048` 比 `+0.02 pts`）、Public LB **`0.95302`**（`Exp #048` `0.95297` 比 **`+0.00005` 向上**）。異種アーキテクチャ（BatchEnsemble NN）の追加によるテスト汎化向上を確認。
+
+### 実験 #049: Kaggle GPU Digit-TE Enhanced TabM (`TabM_D_Classifier`) + Full-Data Refit
+- **実施日:** 2026-11-26
+- **手法:** Kaggle 無料 GPU カーネル (`nobuyukikumagai/s6e11-exp049-digit-te-tabm-refit`) 上で `pytabkit.TabM_D_Classifier`（`tabm_k=32`, `pwl` 埋め込み, 15 epochs）を 5-Fold 学習＋Full-Data Refit（所要 152.2 分）。
+- **結果:** 単体 OOF AUC **`0.947552`**。`Exp #048` との相関 `0.960906` と高い直交性を示し、`Exp #051` で Public LB 向上に寄与。
 
 ### 実験 #050: Kaggle GPU 10-Fold GLM-Boosted CatBoost (対称木 depth=3) + Full-Data Refit (2シード)
 - **実施日:** 2026-11-26
